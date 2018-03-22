@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Me重大</string>
+    <string name="app_name">课程表</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
