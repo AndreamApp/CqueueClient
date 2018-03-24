@@ -1,11 +1,11 @@
 package com.andreamapp.cqu.login;
 
-import android.os.AsyncTask;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,15 +14,9 @@ import android.widget.Toast;
 
 import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.bean.User;
-import com.andreamapp.cqu.utils.API;
-
-import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 /**
  * Created by Andream on 2018/2/27.
- * Website: http://andream.com.cn
- * Email: me@andream.com.cn
  */
 
 public class LoginActivity extends AppCompatActivity{
@@ -34,7 +28,9 @@ public class LoginActivity extends AppCompatActivity{
     private EditText mPasswordEditor;
     private Button mLoginBtn;
 
-    private LoginJWCTask mLoginTask;
+    private UserViewModel mUserViewModel;
+
+    private boolean isLogining;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +43,8 @@ public class LoginActivity extends AppCompatActivity{
                 attemptLogin();
             }
         });
+
+        mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
     }
 
     private void initViews(){
@@ -61,7 +59,7 @@ public class LoginActivity extends AppCompatActivity{
      * 请求登录，会先在本地检查参数
      * */
     private void attemptLogin(){
-        if(mLoginTask != null){
+        if (isLogining) {
             return;
         }
 
@@ -83,8 +81,17 @@ public class LoginActivity extends AppCompatActivity{
             mPasswordEditor.requestFocus();
         }
         else{
-            mLoginTask = new LoginJWCTask(this);
-            mLoginTask.execute(studentNum, password);
+            isLogining = true;
+            showProgress(true);
+            mUserViewModel.fetch(studentNum, password);
+            mUserViewModel.getUser().observe(this, new Observer<User>() {
+                @Override
+                public void onChanged(@Nullable User user) {
+                    Toast.makeText(LoginActivity.this, user.data.stunum, Toast.LENGTH_SHORT).show();
+                    isLogining = false;
+                    showProgress(false);
+                }
+            });
         }
     }
 
@@ -141,57 +148,6 @@ public class LoginActivity extends AppCompatActivity{
             }
         }
         return error;
-    }
-
-    /**
-     * 登录教务网，需要参数：学号、密码，返回User对象，如果出现异常则返回null
-     * */
-    public static class LoginJWCTask extends AsyncTask<String, Void, User> {
-        private WeakReference<LoginActivity> mActivity;
-
-        public LoginJWCTask(LoginActivity activity){
-            mActivity = new WeakReference<LoginActivity>(activity);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            LoginActivity activity = mActivity.get();
-            if(activity != null){
-                activity.showProgress(true);
-            }
-            Log.i("Test", "Pre: " + System.currentTimeMillis() / 1000);
-        }
-
-        @Override
-        protected User doInBackground(String... args) {
-            User user = null;
-            LoginActivity activity = mActivity.get();
-            if(activity != null){
-                try {
-                    user = API.login(activity, args[0], args[1]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            else{
-                // Activity stoped, do nothing
-            }
-            return user;
-        }
-
-        @Override
-        protected void onPostExecute(User user) {
-            // Save data
-            // Switch to MainActivity
-//            Toast.makeText(mActivity.get(), user.data.name, Toast.LENGTH_LONG).show();
-            mActivity.get().mLoginTask = null;
-            mActivity.get().showProgress(false);
-        }
-
-        @Override
-        protected void onCancelled() {
-            mActivity.get().mLoginTask = null;
-        }
     }
 
 }
