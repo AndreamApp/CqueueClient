@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/table_weekday_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="周一"
+            android:gravity="center"
+            android:padding="2dp"
+            android:layout_weight="1.0" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="周二"
+            android:gravity="center"
+            android:padding="2dp"
+            android:layout_weight="1.0" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="周三"
+            android:gravity="center"
+            android:padding="2dp"
+            android:layout_weight="1.0" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="周四"
+            android:gravity="center"
+            android:padding="2dp"
+            android:layout_weight="1.0" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="周五"
+            android:gravity="center"
+            android:padding="2dp"
+            android:layout_weight="1.0" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="周六"
+            android:gravity="center"
+            android:padding="2dp"
+            android:layout_weight="1.0" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="周日"
+            android:gravity="center"
+            android:padding="2dp"
+            android:layout_weight="1.0" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/table_weekday_layout">
+
+        <LinearLayout
+            android:id="@+id/table_content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="2dp"
+                android:orientation="vertical"
+                android:layout_weight="1.0" />
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="2dp"
+                android:orientation="vertical"
+                android:layout_weight="1.0" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="2dp"
+                android:orientation="vertical"
+                android:layout_weight="1.0" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="2dp"
+                android:orientation="vertical"
+                android:layout_weight="1.0" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="2dp"
+                android:orientation="vertical"
+                android:layout_weight="1.0" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="2dp"
+                android:orientation="vertical"
+                android:layout_weight="1.0" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="2dp"
+                android:orientation="vertical"
+                android:layout_weight="1.0" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

@@ -2,6 +2,7 @@ package com.andreamapp.cqu.login;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.bean.User;
+import com.andreamapp.cqu.table.TableFragment;
 
 /**
  * Created by Andream on 2018/2/27.
@@ -89,7 +91,8 @@ public class LoginActivity extends AppCompatActivity{
                 public void onChanged(@Nullable User user) {
                     Toast.makeText(LoginActivity.this, user.data.stunum, Toast.LENGTH_SHORT).show();
                     isLogining = false;
-                    showProgress(false);
+//                    showProgress(false);
+                    startActivity(new Intent(LoginActivity.this, TableFragment.class));
                 }
             });
         }
