@@ -85,8 +85,7 @@ public class LoginActivity extends AppCompatActivity{
         else{
             isLogining = true;
             showProgress(true);
-            mUserViewModel.fetch(studentNum, password);
-            mUserViewModel.getUser().observe(this, new Observer<User>() {
+            mUserViewModel.fetch(studentNum, password).observe(this, new Observer<User>() {
                 @Override
                 public void onChanged(@Nullable User user) {
                     Toast.makeText(LoginActivity.this, user.data.stunum, Toast.LENGTH_SHORT).show();

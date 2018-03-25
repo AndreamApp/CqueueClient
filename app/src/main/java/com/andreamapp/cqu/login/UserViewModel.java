@@ -14,11 +14,12 @@ import com.andreamapp.cqu.bean.User;
 public class UserViewModel extends ViewModel {
     private LiveData<User> user;
 
-    public void fetch(String studentNum, String password) {
+    LiveData<User> fetch(String studentNum, String password) {
         user = UserRepository.login(studentNum, password);
+        return this.user;
     }
 
-    public LiveData<User> getUser() {
+    LiveData<User> get() {
         return this.user;
     }
 }

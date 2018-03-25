@@ -25,6 +25,7 @@ public class CourseIndex implements Comparable<CourseIndex> {
     private static void parseSchedule(Table.Course course, Table.Course.Schedule schedule, List<Set<CourseIndex>> res) {
         CourseIndex index = new CourseIndex();
 
+        // 解析在星期几上课
         String[] time = schedule.classtime.replaceAll("[\\[\\]\\-节]", " ").split(" ");
         int weekday = 0;
         switch (time[0]) {
@@ -51,25 +52,32 @@ public class CourseIndex implements Comparable<CourseIndex> {
                 break;
         }
         index.weekday = weekday - 1;
+        // 上课节次
         index.sectionStart = Integer.parseInt(time[1]);
         index.sectionEnd = Integer.parseInt(time.length > 2 ? time[2] : time[1]);
+        // 上课教室
         index.classroom = schedule.classroom;
         index.course = course;
 
+        // 上课周次
         for (String segment : schedule.weeks.split(",")) {
             String[] period = segment.split("-");
             if (period.length == 2) {
                 int weekStart = Integer.parseInt(period[0]);
                 int weekEnd = Integer.parseInt(period[1]);
-                for (int i = weekStart; i < weekEnd; i++) {
+                // [weekStart, weekEnd], inclusive
+                for (int i = weekStart; i <= weekEnd; i++) {
                     res.get(i).add(index);
                 }
+            } else if (period.length == 1) {
+                int week = Integer.parseInt(period[0]);
+                res.get(week).add(index);
             }
         }
     }
 
     public static List<Set<CourseIndex>> generate(Table table) {
-        List<Set<CourseIndex>> res = new ArrayList<>(25);
+        List<Set<CourseIndex>> res = new ArrayList<>(30);
         for (int i = 0; i < 25; i++) {
             res.add(new TreeSet<CourseIndex>());
         }

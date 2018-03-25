@@ -2,7 +2,7 @@ package com.andreamapp.cqu;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.Calendar;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -12,6 +12,17 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+
+        Calendar c = Calendar.getInstance();
+        // Todo: Fetch it from network
+        c.set(2018, Calendar.MARCH, 5, 0, 0, 0);
+
+        long a = Calendar.getInstance().getTimeInMillis();
+        long b = c.getTimeInMillis();
+        long d = System.currentTimeMillis();
+
+        long days = (a - b) / (24 * 60 * 60 * 1000);
+        long weekNum = days / 7;
+
     }
 }

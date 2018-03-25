@@ -1,16 +1,25 @@
 package com.andreamapp.cqu.table;
 
-import android.os.AsyncTask;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.andreamapp.cqu.App;
 import com.andreamapp.cqu.R;
-import com.andreamapp.cqu.bean.Table;
-import com.andreamapp.cqu.utils.API;
 
-import java.io.IOException;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Andream on 2018/3/24.
@@ -21,35 +30,105 @@ import java.io.IOException;
 public class TableFragment extends AppCompatActivity {
 
     // TODO: Maybe can be replaced by RecyclerView
-    TableView mTableView;
+//    TableView mTableView;
+    Toolbar mToolBar;
+    ViewPager mViewPager;
+    TableViewModel mTableViewModel;
+
+    Calendar semesterStartDate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        final View view = ViewGroup.inflate(this, R.layout.table_fragment, null);
         setContentView(R.layout.table_fragment);
 
-        mTableView = findViewById(R.id.table_view);
+//        mTableView = findViewById(R.id.table_view);
+        mToolBar = findViewById(R.id.tool_bar);
+        mViewPager = findViewById(R.id.table_view_pager);
 
-        // TODO: Create ViewModel and Repository to replace it
-        new AsyncTask<Void, Void, Table>() {
-
+        mTableViewModel = ViewModelProviders.of(this).get(TableViewModel.class);
+        mTableViewModel.fetchIndexes().observe(this, new Observer<List<Set<CourseIndex>>>() {
             @Override
-            protected Table doInBackground(Void... voids) {
-                Table table = null;
-                try {
-                    table = API.getTable(App.context());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return table;
+            public void onChanged(@Nullable List<Set<CourseIndex>> indexes) {
+                WeekPagerAdapter adapter = new WeekPagerAdapter(getSupportFragmentManager(), indexes);
+                mViewPager.setAdapter(adapter);
+                Calendar c = Calendar.getInstance();
+                // Todo: Fetch it from network
+                c.set(2018, Calendar.MARCH, 5, 0, 0, 0);
+                setSemesterStartDate(c);
+            }
+        });
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
             }
 
             @Override
-            protected void onPostExecute(Table table) {
-                mTableView.setData(table);
+            public void onPageSelected(int position) {
+//                TextView tv = findViewById(R.id.table_week_btn);
+//                tv.setText("第"+(position+1)+"周");
+                mToolBar.setTitle("第" + (position + 1) + "周");
             }
-        }.execute();
 
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    public Calendar getSemesterStartDate() {
+        return semesterStartDate;
+    }
+
+    public void setSemesterStartDate(Calendar semesterStartDate) {
+        this.semesterStartDate = semesterStartDate;
+        long days = (Calendar.getInstance().getTimeInMillis() - semesterStartDate.getTimeInMillis()) / (24 * 60 * 60 * 1000);
+        long weekNum = days / 7;
+        mViewPager.setCurrentItem((int) weekNum);
+    }
+
+    class WeekPagerAdapter extends FragmentPagerAdapter {
+
+        List<Set<CourseIndex>> indexes;
+
+        public WeekPagerAdapter(FragmentManager fm, List<Set<CourseIndex>> indexes) {
+            super(fm);
+            this.indexes = indexes;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return TableWeekFragment.newInstance(indexes, position + 1);
+        }
+
+        @Override
+        public int getCount() {
+            return 25;
+        }
+    }
+
+    public static class TableWeekFragment extends Fragment {
+        List<Set<CourseIndex>> indexes;
+        int week;
+
+        static TableWeekFragment newInstance(List<Set<CourseIndex>> indexes, int week) {
+            TableWeekFragment f = new TableWeekFragment();
+
+            f.indexes = indexes;
+            f.week = week;
+            return f;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            TableView v = new TableView(inflater.getContext(), null);
+            v.setIndexes(indexes);
+            v.setCurrentWeek(week);
+            return v;
+        }
     }
 }
