@@ -25,6 +25,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".table.TableFragment" />
+        <activity
+            android:label="成绩"
+            android:name=".grade.GradeActivity" />
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.andreamapp.cqu.table;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,10 +13,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.andreamapp.cqu.R;
+import com.andreamapp.cqu.grade.GradeActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -59,6 +63,21 @@ public class TableFragment extends AppCompatActivity {
             }
         });
 
+        setSupportActionBar(mToolBar);
+        mToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_exams:
+                        break;
+                    case R.id.action_grade:
+                        startActivity(new Intent(TableFragment.this, GradeActivity.class));
+                        break;
+                }
+                return true;
+            }
+        });
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -77,6 +96,12 @@ public class TableFragment extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
     }
 
     public Calendar getSemesterStartDate() {
