@@ -5,6 +5,10 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,9 +36,8 @@ import com.andreamapp.cqu.bean.Grade;
 public class GradeActivity extends AppCompatActivity {
 
     Toolbar mToolBar;
-    RecyclerView mGradeRecyclerView;
-    GradeAdapter mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;
+    ViewPager mPager;
+    SemesterPagerAdapter mPagerAdapter;
 
     GradeViewModel mViewModel;
 
@@ -44,34 +47,83 @@ public class GradeActivity extends AppCompatActivity {
         setContentView(R.layout.grade_activity);
 
         mToolBar = findViewById(R.id.tool_bar);
-        mGradeRecyclerView = findViewById(R.id.grade_recycler_view);
+        mPager = findViewById(R.id.grade_pager);
 
         setSupportActionBar(mToolBar);
-
-        mAdapter = new GradeAdapter();
-        mGradeRecyclerView.setAdapter(mAdapter);
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mGradeRecyclerView.setLayoutManager(mLayoutManager);
 
         mViewModel = ViewModelProviders.of(this).get(GradeViewModel.class);
         mViewModel.fetch().observe(this, new Observer<Grade>() {
             @Override
             public void onChanged(@Nullable Grade grade) {
-                mAdapter.setGrade(grade);
+                if (grade != null) {
+                    mPagerAdapter = new SemesterPagerAdapter(getSupportFragmentManager(), grade);
+                    mPager.setAdapter(mPagerAdapter);
+                }
             }
         });
     }
 
-    public static class GradeAdapter extends RecyclerView.Adapter<GradeAdapter.ViewHolder> {
+    class SemesterPagerAdapter extends FragmentPagerAdapter {
         Grade grade;
 
-        public Grade getGrade() {
-            return grade;
+        SemesterPagerAdapter(FragmentManager fm, @NonNull Grade grade) {
+            super(fm);
+            this.grade = grade;
         }
 
-        public void setGrade(Grade grade) {
-            this.grade = grade;
+        @Override
+        public Fragment getItem(int position) {
+            return GradeSemesterFragment.newInstance(grade.data.get(grade.data.size() - position - 1));
+        }
+
+        @Override
+        public int getCount() {
+            if (grade == null || grade.data == null) {
+                return 0;
+            }
+            return grade.data.size();
+        }
+    }
+
+    public static class GradeSemesterFragment extends Fragment {
+
+        public static GradeSemesterFragment newInstance(@NonNull Grade.SemesterGrade sg) {
+            GradeSemesterFragment fragment = new GradeSemesterFragment();
+            fragment.sg = sg;
+            return fragment;
+        }
+
+        Grade.SemesterGrade sg;
+        TextView mTitleText;
+        RecyclerView mGradeRecyclerView;
+        GradeAdapter mAdapter;
+        RecyclerView.LayoutManager mLayoutManager;
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View v = inflater.inflate(R.layout.grade_semester_pager, container, false);
+            mTitleText = v.findViewById(R.id.grade_semester_text);
+            mGradeRecyclerView = v.findViewById(R.id.grade_recycler_view);
+
+            mTitleText.setText(sg.semester);
+
+            mAdapter = new GradeAdapter();
+            mAdapter.setSemesterGrade(sg);
+            mGradeRecyclerView.setAdapter(mAdapter);
+
+            mLayoutManager = new LinearLayoutManager(getContext());
+            mGradeRecyclerView.setLayoutManager(mLayoutManager);
+            return v;
+        }
+    }
+
+    public static class GradeAdapter extends RecyclerView.Adapter<GradeAdapter.ViewHolder> {
+        @NonNull
+        Grade.SemesterGrade sg;
+
+        public void setSemesterGrade(Grade.SemesterGrade sg) {
+            this.sg = sg;
             notifyDataSetChanged();
         }
 
@@ -85,33 +137,15 @@ public class GradeActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            int index = 0;
-            o:
-            for (int i = grade.data.size() - 1; i >= 0; i--) {
-                Grade.SemesterGrade sg = grade.data.get(i);
-                if (sg.data != null) {
-                    for (Grade.SemesterGrade.CourseGrade cg : sg.data) {
-                        if (index == position) {
-                            holder.bind(cg);
-                            break o;
-                        } else {
-                            index++;
-                        }
-                    }
-                }
-            }
+            holder.bind(sg.data.get(position));
         }
 
         @Override
         public int getItemCount() {
-            if (grade == null || grade.data == null || grade.data.size() == 0) {
+            if (sg == null || sg.data == null) {
                 return 0;
             }
-            int sum = 0;
-            for (Grade.SemesterGrade sg : grade.data) {
-                sum += sg.data == null ? 0 : sg.data.size();
-            }
-            return sum;
+            return sg.data.size();
         }
 
         // Provide a reference to the views for each data item
@@ -119,7 +153,7 @@ public class GradeActivity extends AppCompatActivity {
         // you provide access to all the views for a data item in a view holder
         public static class ViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
-            public TextView name, credit, score;
+            TextView name, credit, score;
             Grade.SemesterGrade.CourseGrade courseGrade;
 
             public ViewHolder(View v) {
@@ -129,7 +163,7 @@ public class GradeActivity extends AppCompatActivity {
                 score = v.findViewById(R.id.grade_item_score);
             }
 
-            public void bind(Grade.SemesterGrade.CourseGrade cg) {
+            void bind(@NonNull Grade.SemesterGrade.CourseGrade cg) {
                 this.courseGrade = cg;
                 name.setText(cg.course_name);
                 credit.setText(cg.credit);
