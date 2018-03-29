@@ -22,6 +22,8 @@ public class CourseIndex implements Comparable<CourseIndex> {
     String classroom;
     Table.Course course;
 
+    public static final int MAX_WEEK_NUM = 25;
+
     private static void parseSchedule(Table.Course course, Table.Course.Schedule schedule, List<Set<CourseIndex>> res) {
         CourseIndex index = new CourseIndex();
 
@@ -77,8 +79,8 @@ public class CourseIndex implements Comparable<CourseIndex> {
     }
 
     public static List<Set<CourseIndex>> generate(Table table) {
-        List<Set<CourseIndex>> res = new ArrayList<>(30);
-        for (int i = 0; i < 25; i++) {
+        List<Set<CourseIndex>> res = new ArrayList<>(MAX_WEEK_NUM + 1);
+        for (int i = 0; i < MAX_WEEK_NUM + 1; i++) {
             res.add(new TreeSet<CourseIndex>());
         }
 

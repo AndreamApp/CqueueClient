@@ -8,14 +8,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.bean.User;
 import com.andreamapp.cqu.table.TableFragment;
+import com.andreamapp.cqu.utils.API;
 
 /**
  * Created by Andream on 2018/2/27.
@@ -37,16 +38,22 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        initViews();
-        mLoginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptLogin();
-            }
-        });
 
-        mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        if (API.cookieExpired(this)) {
+            setContentView(R.layout.activity_login);
+            initViews();
+            mLoginBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    attemptLogin();
+                }
+            });
+
+            mUserViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        } else {
+            // cookie not expired, skip login
+            startActivity(new Intent(LoginActivity.this, TableFragment.class));
+        }
     }
 
     private void initViews(){
@@ -84,11 +91,11 @@ public class LoginActivity extends AppCompatActivity{
         }
         else{
             isLogining = true;
+            hideInputMethod();
             showProgress(true);
             mUserViewModel.fetch(studentNum, password).observe(this, new Observer<User>() {
                 @Override
                 public void onChanged(@Nullable User user) {
-                    Toast.makeText(LoginActivity.this, user.data.stunum, Toast.LENGTH_SHORT).show();
                     isLogining = false;
 //                    showProgress(false);
                     startActivity(new Intent(LoginActivity.this, TableFragment.class));
@@ -103,6 +110,14 @@ public class LoginActivity extends AppCompatActivity{
     private void showProgress(boolean state){
         mLoginProgress.setVisibility(state ? View.VISIBLE : View.GONE);
         mLoginForm.setVisibility(state ? View.GONE : View.VISIBLE);
+    }
+
+    private void hideInputMethod() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     /**

@@ -41,6 +41,7 @@ public class TableFragment extends AppCompatActivity {
     ViewPager mViewPager;
     SwipeRefreshLayout mRefresh;
     TableViewModel mTableViewModel;
+    int mThisWeekNum;
 
     Calendar semesterStartDate;
 
@@ -114,6 +115,20 @@ public class TableFragment extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (mViewPager.getAdapter() != null && mViewPager.getAdapter().getCount() > 0
+                && mThisWeekNum != mViewPager.getCurrentItem()) {
+            mViewPager.setCurrentItem(mThisWeekNum);
+        } else {
+            // back to home, avoid reloading from network
+            Intent startMain = new Intent(Intent.ACTION_MAIN);
+            startMain.addCategory(Intent.CATEGORY_HOME);
+            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(startMain);
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
@@ -127,7 +142,8 @@ public class TableFragment extends AppCompatActivity {
         this.semesterStartDate = semesterStartDate;
         long days = (Calendar.getInstance().getTimeInMillis() - semesterStartDate.getTimeInMillis()) / (24 * 60 * 60 * 1000);
         long weekNum = days / 7;
-        mViewPager.setCurrentItem((int) weekNum);
+        mThisWeekNum = (int) weekNum;
+        mViewPager.setCurrentItem(mThisWeekNum);
     }
 
     class WeekPagerAdapter extends FragmentPagerAdapter {
@@ -146,7 +162,8 @@ public class TableFragment extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 25;
+            // indexes.get(0) has no value
+            return indexes == null ? 0 : indexes.size() - 1;
         }
     }
 

@@ -67,7 +67,7 @@ public class TableView extends RelativeLayout {
     }
 
     public void setCurrentWeek(int week) {
-        if (week < 1 || week > 25) {
+        if (week < 1 || week > CourseIndex.MAX_WEEK_NUM) {
             return;
         }
 

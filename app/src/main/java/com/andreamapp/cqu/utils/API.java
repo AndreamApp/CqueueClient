@@ -64,6 +64,24 @@ public class API {
         return client;
     }
 
+    public static boolean cookieExpired(Context context) {
+        SharedPrefsCookiePersistor persistor = new SharedPrefsCookiePersistor(context);
+        List<Cookie> cookies = persistor.loadAll();
+        boolean res = false;
+        // no cookie, treat as expired
+        if (cookies == null || cookies.size() == 0) {
+            res = true;
+        } else {
+            for (Cookie c : cookies) {
+                if (c.expiresAt() < System.currentTimeMillis()) {
+                    res = true;
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+
     public static User login(Context context, String stunum, String password) throws IOException {
         OkHttpClient client = withSaveOnlyCookie(context);
         Request request = new Request.Builder()
