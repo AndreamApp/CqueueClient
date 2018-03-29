@@ -13,7 +13,7 @@ import com.andreamapp.cqu.utils.API;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -34,6 +34,7 @@ public class ExampleInstrumentedTest {
             Table table =  API.getTable(appContext);
             Grade grade = API.getGrade(appContext);
             Exams exams = API.getExams(appContext);
+            System.currentTimeMillis();
         }
     }
 }

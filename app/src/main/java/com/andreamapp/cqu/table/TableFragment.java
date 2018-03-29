@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.andreamapp.cqu.R;
+import com.andreamapp.cqu.exams.ExamsActivity;
 import com.andreamapp.cqu.grade.GradeActivity;
 
 import java.util.Calendar;
@@ -69,6 +70,7 @@ public class TableFragment extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_exams:
+                        startActivity(new Intent(TableFragment.this, ExamsActivity.class));
                         break;
                     case R.id.action_grade:
                         startActivity(new Intent(TableFragment.this, GradeActivity.class));

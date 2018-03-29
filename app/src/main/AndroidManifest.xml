@@ -28,6 +28,9 @@
         <activity
             android:label="成绩"
             android:name=".grade.GradeActivity" />
+        <activity
+            android:label="考试"
+            android:name=".exams.ExamsActivity" />
     </application>
 
 </manifest>
