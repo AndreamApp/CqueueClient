@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ public class TableFragment extends AppCompatActivity {
 //    TableView mTableView;
     Toolbar mToolBar;
     ViewPager mViewPager;
+    SwipeRefreshLayout mRefresh;
     TableViewModel mTableViewModel;
 
     Calendar semesterStartDate;
@@ -49,20 +51,12 @@ public class TableFragment extends AppCompatActivity {
 
 //        mTableView = findViewById(R.id.table_view);
         mToolBar = findViewById(R.id.tool_bar);
+        mRefresh = findViewById(R.id.refresh);
         mViewPager = findViewById(R.id.table_view_pager);
 
         mTableViewModel = ViewModelProviders.of(this).get(TableViewModel.class);
-        mTableViewModel.fetchIndexes().observe(this, new Observer<List<Set<CourseIndex>>>() {
-            @Override
-            public void onChanged(@Nullable List<Set<CourseIndex>> indexes) {
-                WeekPagerAdapter adapter = new WeekPagerAdapter(getSupportFragmentManager(), indexes);
-                mViewPager.setAdapter(adapter);
-                Calendar c = Calendar.getInstance();
-                // Todo: Fetch it from network
-                c.set(2018, Calendar.MARCH, 5, 0, 0, 0);
-                setSemesterStartDate(c);
-            }
-        });
+        mRefresh.setEnabled(false);
+        refresh();
 
         setSupportActionBar(mToolBar);
         mToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -74,6 +68,9 @@ public class TableFragment extends AppCompatActivity {
                         break;
                     case R.id.action_grade:
                         startActivity(new Intent(TableFragment.this, GradeActivity.class));
+                        break;
+                    case R.id.action_refresh_table:
+                        refresh();
                         break;
                 }
                 return true;
@@ -96,6 +93,22 @@ public class TableFragment extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+    }
+
+    public void refresh() {
+        mRefresh.setRefreshing(true);
+        mTableViewModel.fetchIndexes().observe(this, new Observer<List<Set<CourseIndex>>>() {
+            @Override
+            public void onChanged(@Nullable List<Set<CourseIndex>> indexes) {
+                WeekPagerAdapter adapter = new WeekPagerAdapter(getSupportFragmentManager(), indexes);
+                mViewPager.setAdapter(adapter);
+                Calendar c = Calendar.getInstance();
+                // Todo: Fetch it from network
+                c.set(2018, Calendar.MARCH, 5, 0, 0, 0);
+                setSemesterStartDate(c);
+                mRefresh.setRefreshing(false);
             }
         });
     }

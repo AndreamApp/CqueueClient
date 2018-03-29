@@ -16,13 +16,20 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/table_view_pager"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.0">
+        android:layout_height="match_parent">
 
-    </android.support.v4.view.ViewPager>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/table_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0">
+
+        </android.support.v4.view.ViewPager>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <!--<com.andreamapp.cqu.table.TableView-->
     <!--android:id="@+id/table_view"-->

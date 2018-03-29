@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +30,6 @@ import com.andreamapp.cqu.bean.Grade;
 
 
 /**
- * TODO: Semester Header divider
  * Card Semester
  * SwipeRefresh
  */
@@ -52,23 +52,32 @@ public class GradeActivity extends AppCompatActivity {
         setSupportActionBar(mToolBar);
 
         mViewModel = ViewModelProviders.of(this).get(GradeViewModel.class);
+        mPagerAdapter = new SemesterPagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+        refresh(null);
+    }
+
+    public void refresh(final GradeSemesterFragment fragment) {
         mViewModel.fetch().observe(this, new Observer<Grade>() {
             @Override
             public void onChanged(@Nullable Grade grade) {
                 if (grade != null) {
-                    mPagerAdapter = new SemesterPagerAdapter(getSupportFragmentManager(), grade);
-                    mPager.setAdapter(mPagerAdapter);
+                    mPagerAdapter.setGrade(grade);
+                    mPagerAdapter.notifyDataSetChanged();
+                    if (fragment != null) {
+                        fragment.mRefresh.setRefreshing(false);
+                    }
                 }
             }
         });
     }
 
     class SemesterPagerAdapter extends FragmentPagerAdapter {
+
         Grade grade;
 
-        SemesterPagerAdapter(FragmentManager fm, @NonNull Grade grade) {
+        SemesterPagerAdapter(FragmentManager fm) {
             super(fm);
-            this.grade = grade;
         }
 
         @Override
@@ -82,6 +91,14 @@ public class GradeActivity extends AppCompatActivity {
                 return 0;
             }
             return grade.data.size();
+        }
+
+        public Grade getGrade() {
+            return grade;
+        }
+
+        public void setGrade(Grade grade) {
+            this.grade = grade;
         }
     }
 
@@ -97,7 +114,9 @@ public class GradeActivity extends AppCompatActivity {
         TextView mTitleText;
         RecyclerView mGradeRecyclerView;
         GradeAdapter mAdapter;
-        RecyclerView.LayoutManager mLayoutManager;
+        LinearLayoutManager mLayoutManager;
+
+        SwipeRefreshLayout mRefresh;
 
         @Nullable
         @Override
@@ -105,6 +124,7 @@ public class GradeActivity extends AppCompatActivity {
             View v = inflater.inflate(R.layout.grade_semester_pager, container, false);
             mTitleText = v.findViewById(R.id.grade_semester_text);
             mGradeRecyclerView = v.findViewById(R.id.grade_recycler_view);
+            mRefresh = v.findViewById(R.id.refresh);
 
             mTitleText.setText(sg.semester);
 
@@ -114,6 +134,28 @@ public class GradeActivity extends AppCompatActivity {
 
             mLayoutManager = new LinearLayoutManager(getContext());
             mGradeRecyclerView.setLayoutManager(mLayoutManager);
+
+            mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if (getActivity() != null) {
+                        ((GradeActivity) getActivity()).refresh(GradeSemesterFragment.this);
+                    }
+                }
+            });
+            mGradeRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    mRefresh.setEnabled(mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0);
+                    super.onScrolled(recyclerView, dx, dy);
+                }
+            });
+
             return v;
         }
     }

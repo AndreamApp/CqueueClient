@@ -10,4 +10,8 @@
         android:id="@+id/action_grade"
         android:title="成绩"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_refresh_table"
+        android:title="重新导入课表"
+        app:showAsAction="never" />
 </menu>
