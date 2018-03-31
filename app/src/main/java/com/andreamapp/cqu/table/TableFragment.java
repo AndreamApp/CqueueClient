@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.base.BaseModelActivity;
@@ -32,7 +34,10 @@ import java.util.Set;
  * Website: http://andreamapp.com
  */
 
-public class TableFragment extends BaseModelActivity<CourseIndexWrapper> {
+// TODO: Add course detail popup window
+// TODO: Add week selector popup window
+// TODO: Add semester selector
+public class TableFragment extends BaseModelActivity<CourseIndexWrapper> implements TableView.OnCourseClickListener {
 
     Toolbar mToolBar;
     ViewPager mViewPager;
@@ -152,6 +157,11 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> {
         mViewPager.setCurrentItem(mThisWeekNum);
     }
 
+    @Override
+    public void onCourseClicked(CourseIndex index) {
+        CourseDetailDialogFragment.newInstance(index).show(getSupportFragmentManager(), "CourseDetail");
+    }
+
     class WeekPagerAdapter extends FragmentPagerAdapter {
 
         CourseIndexWrapper wrapper;
@@ -172,9 +182,14 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> {
         }
     }
 
+    /**
+     * The fragment of a single week page
+     */
     public static class TableWeekFragment extends Fragment {
         List<Set<CourseIndex>> indexes;
         int week;
+
+        TableView tableView;
 
         static TableWeekFragment newInstance(List<Set<CourseIndex>> indexes, int week) {
             TableWeekFragment f = new TableWeekFragment();
@@ -187,10 +202,66 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> {
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            TableView v = new TableView(inflater.getContext(), null);
-            v.setIndexes(indexes);
-            v.setCurrentWeek(week);
+            tableView = new TableView(inflater.getContext(), null);
+            tableView.setIndexes(indexes);
+            tableView.setCurrentWeek(week);
+            // show course detail
+            tableView.setOnCourseClickListener((TableFragment) getActivity());
+            return tableView;
+        }
+    }
+
+    /**
+     * show the detail of course information, as a bottom sheet dialog
+     * including course's name, teacher's name, classroom, credit, hours in teaching
+     * eg.
+     * 毛泽东思想和中国特色社会主义理论体系概论
+     * 张运青（任课教师）
+     * D1331（上课地点）
+     * 3.00（学分）
+     * 48.0（总学时）
+     */
+    public static class CourseDetailDialogFragment extends BottomSheetDialogFragment {
+
+        CourseIndex courseIndex;
+
+        TextView courseName, teacherName, classroom, credit, hours;
+
+        public static CourseDetailDialogFragment newInstance(CourseIndex index) {
+            CourseDetailDialogFragment fragment = new CourseDetailDialogFragment();
+            fragment.courseIndex = index;
+
+            return fragment;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View v = inflater.inflate(R.layout.table_course_detail_sheet, container, false);
+            courseName = v.findViewById(R.id.course_name);
+            teacherName = v.findViewById(R.id.course_teacher_name);
+            classroom = v.findViewById(R.id.course_classroom);
+            credit = v.findViewById(R.id.course_credit);
+            hours = v.findViewById(R.id.course_hours);
+
+            setCourseIndex(courseIndex);
+
             return v;
+        }
+
+        public CourseIndex getCourseIndex() {
+            return courseIndex;
+        }
+
+        public void setCourseIndex(CourseIndex courseIndex) {
+            this.courseIndex = courseIndex;
+            if (courseIndex != null && courseIndex.course != null) {
+                courseName.setText(courseIndex.course.course_name);
+                teacherName.setText(courseIndex.course.teacher + "（任课教师）");
+                classroom.setText(courseIndex.classroom + "（上课地点）");
+                credit.setText(courseIndex.course.credit + "（学分）");
+                hours.setText(courseIndex.course.hours_all + "（总学时）");
+            }
         }
     }
 }

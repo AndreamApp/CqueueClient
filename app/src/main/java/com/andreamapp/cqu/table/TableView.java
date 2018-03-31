@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -31,6 +32,8 @@ public class TableView extends RelativeLayout {
     private List<Set<CourseIndex>> mCourseIndexes;
     Date semesterStartDate;
 
+    private OnCourseClickListener listener;
+
     public TableView(@NonNull Context context) {
         super(context);
     }
@@ -48,6 +51,14 @@ public class TableView extends RelativeLayout {
         inflate(context, R.layout.table_view, this);
         mWeekdayLayout = findViewById(R.id.table_weekday_layout);
         mContentLayout = findViewById(R.id.table_content_layout);
+    }
+
+    public OnCourseClickListener getOnCourseClickListener() {
+        return listener;
+    }
+
+    public void setOnCourseClickListener(OnCourseClickListener listener) {
+        this.listener = listener;
     }
 
     public List<Set<CourseIndex>> getIndexes() {
@@ -74,7 +85,7 @@ public class TableView extends RelativeLayout {
         int lastWeek = -1;
         LinearLayout layout = null;
         int lastSection = 0;
-        for (CourseIndex index : mCourseIndexes.get(week)) {
+        for (final CourseIndex index : mCourseIndexes.get(week)) {
             if (index.weekday != lastWeek) {
                 lastWeek = index.weekday;
                 lastSection = 0;
@@ -82,7 +93,7 @@ public class TableView extends RelativeLayout {
                 layout.removeAllViews();
             }
 
-            // 有空课
+            // fill empty gap with empty view
             if (index.sectionStart - lastSection > 1) {
                 for (int i = lastSection + 1; i < index.sectionStart; i++) {
                     CourseView empty = new CourseView(getContext());
@@ -97,6 +108,7 @@ public class TableView extends RelativeLayout {
 
             lastSection = index.sectionEnd;
 
+            // create view, add to layout
             CourseView view = new CourseView(getContext());
             view.setCourse(index);
             MarginLayoutParams lp = new MarginLayoutParams(
@@ -104,6 +116,16 @@ public class TableView extends RelativeLayout {
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             lp.bottomMargin = getResources().getDimensionPixelSize(R.dimen.table_item_margin);
             layout.addView(view, lp);
+
+            // bind click handler
+            view.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onCourseClicked(index);
+                    }
+                }
+            });
         }
     }
 
@@ -134,5 +156,9 @@ public class TableView extends RelativeLayout {
                             + (sections - 1) * getResources().getDimensionPixelSize(R.dimen.table_item_margin));
             setBackgroundResource(R.drawable.table_item_bg);
         }
+    }
+
+    public interface OnCourseClickListener {
+        void onCourseClicked(CourseIndex index);
     }
 }
