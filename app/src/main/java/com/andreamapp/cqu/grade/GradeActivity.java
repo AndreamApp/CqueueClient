@@ -116,6 +116,7 @@ public class GradeActivity extends BaseModelActivity<Grade> {
 
         Grade.SemesterGrade sg;
         TextView mTitleText;
+        TextView mGpaText;
         RecyclerView mGradeRecyclerView;
         GradeAdapter mAdapter;
         LinearLayoutManager mLayoutManager;
@@ -127,10 +128,12 @@ public class GradeActivity extends BaseModelActivity<Grade> {
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.grade_semester_pager, container, false);
             mTitleText = v.findViewById(R.id.grade_semester_text);
+            mGpaText = v.findViewById(R.id.grade_gpa_text);
             mGradeRecyclerView = v.findViewById(R.id.grade_recycler_view);
             mRefresh = v.findViewById(R.id.refresh);
 
             mTitleText.setText(sg.semester);
+            mGpaText.setText("GPA: " + sg.gpa);
 
             mAdapter = new GradeAdapter();
             mAdapter.setSemesterGrade(sg);

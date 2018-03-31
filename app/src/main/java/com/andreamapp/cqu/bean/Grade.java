@@ -53,6 +53,7 @@ public class Grade implements Resp {
     */
     public class SemesterGrade {
         public String semester;
+        public String gpa;
         public List<CourseGrade> data;
         
         public class CourseGrade {
@@ -61,7 +62,6 @@ public class Grade implements Resp {
             public String credit;
             public String grade;
         }
-
     }
 
 }
