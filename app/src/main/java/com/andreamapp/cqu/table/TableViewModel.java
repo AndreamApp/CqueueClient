@@ -5,9 +5,6 @@ import android.arch.lifecycle.ViewModel;
 
 import com.andreamapp.cqu.bean.Table;
 
-import java.util.List;
-import java.util.Set;
-
 /**
  * Created by Andream on 2018/3/24.
  * Email: andreamapp@qq.com
@@ -16,14 +13,14 @@ import java.util.Set;
 
 public class TableViewModel extends ViewModel {
     private LiveData<Table> data;
-    private LiveData<List<Set<CourseIndex>>> indexes;
+    private LiveData<CourseIndexWrapper> indexes;
 
     LiveData<Table> fetch() {
         this.data = TableRepository.fetch();
         return this.data;
     }
 
-    LiveData<List<Set<CourseIndex>>> fetchIndexes() {
+    LiveData<CourseIndexWrapper> fetchIndexes() {
         this.indexes = TableRepository.courseIndexes();
         return this.indexes;
     }
@@ -33,7 +30,7 @@ public class TableViewModel extends ViewModel {
     }
 
 
-    LiveData<List<Set<CourseIndex>>> getIndexes() {
+    LiveData<CourseIndexWrapper> getIndexes() {
         return this.indexes;
     }
 

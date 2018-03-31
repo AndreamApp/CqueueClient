@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.andreamapp.cqu.R;
+import com.andreamapp.cqu.base.BaseModelActivity;
 import com.andreamapp.cqu.bean.Grade;
 
 /**
@@ -33,7 +33,7 @@ import com.andreamapp.cqu.bean.Grade;
  * Card Semester
  * SwipeRefresh
  */
-public class GradeActivity extends AppCompatActivity {
+public class GradeActivity extends BaseModelActivity<Grade> {
 
     Toolbar mToolBar;
     ViewPager mPager;
@@ -61,12 +61,16 @@ public class GradeActivity extends AppCompatActivity {
         mViewModel.fetch().observe(this, new Observer<Grade>() {
             @Override
             public void onChanged(@Nullable Grade grade) {
-                if (grade != null) {
+                // Call for msg snack bar
+                GradeActivity.super.onChanged(grade);
+
+                if (fragment != null) {
+                    fragment.mRefresh.setRefreshing(false);
+                }
+
+                if (grade != null && grade.status()) {
                     mPagerAdapter.setGrade(grade);
                     mPagerAdapter.notifyDataSetChanged();
-                    if (fragment != null) {
-                        fragment.mRefresh.setRefreshing(false);
-                    }
                 }
             }
         });
@@ -146,13 +150,11 @@ public class GradeActivity extends AppCompatActivity {
             mGradeRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
                 }
 
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     mRefresh.setEnabled(mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0);
-                    super.onScrolled(recyclerView, dx, dy);
                 }
             });
 

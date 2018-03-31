@@ -1,6 +1,5 @@
 package com.andreamapp.cqu.table;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.andreamapp.cqu.R;
+import com.andreamapp.cqu.base.BaseModelActivity;
 import com.andreamapp.cqu.exams.ExamsActivity;
 import com.andreamapp.cqu.grade.GradeActivity;
 
@@ -33,12 +32,11 @@ import java.util.Set;
  * Website: http://andreamapp.com
  */
 
-public class TableFragment extends AppCompatActivity {
+public class TableFragment extends BaseModelActivity<CourseIndexWrapper> {
 
-    // TODO: Maybe can be replaced by RecyclerView
-//    TableView mTableView;
     Toolbar mToolBar;
     ViewPager mViewPager;
+    WeekPagerAdapter mAdapter;
     SwipeRefreshLayout mRefresh;
     TableViewModel mTableViewModel;
     int mThisWeekNum;
@@ -54,6 +52,10 @@ public class TableFragment extends AppCompatActivity {
         mToolBar = findViewById(R.id.tool_bar);
         mRefresh = findViewById(R.id.refresh);
         mViewPager = findViewById(R.id.table_view_pager);
+
+
+        mAdapter = new WeekPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mAdapter);
 
         mTableViewModel = ViewModelProviders.of(this).get(TableViewModel.class);
         mRefresh.setEnabled(false);
@@ -100,18 +102,22 @@ public class TableFragment extends AppCompatActivity {
 
     public void refresh() {
         mRefresh.setRefreshing(true);
-        mTableViewModel.fetchIndexes().observe(this, new Observer<List<Set<CourseIndex>>>() {
-            @Override
-            public void onChanged(@Nullable List<Set<CourseIndex>> indexes) {
-                WeekPagerAdapter adapter = new WeekPagerAdapter(getSupportFragmentManager(), indexes);
-                mViewPager.setAdapter(adapter);
-                Calendar c = Calendar.getInstance();
-                // Todo: Fetch it from network
-                c.set(2018, Calendar.MARCH, 5, 0, 0, 0);
-                setSemesterStartDate(c);
-                mRefresh.setRefreshing(false);
-            }
-        });
+        mTableViewModel.fetchIndexes().observe(this, this);
+    }
+
+    @Override
+    public void onChanged(@Nullable CourseIndexWrapper wrapper) {
+        super.onChanged(wrapper);
+
+        mRefresh.setRefreshing(false);
+        if (wrapper != null && wrapper.status()) {
+            mAdapter.wrapper = wrapper;
+            mAdapter.notifyDataSetChanged();
+            Calendar c = Calendar.getInstance();
+            // Todo: Fetch it from network
+            c.set(2018, Calendar.MARCH, 5, 0, 0, 0);
+            setSemesterStartDate(c);
+        }
     }
 
     @Override
@@ -148,22 +154,21 @@ public class TableFragment extends AppCompatActivity {
 
     class WeekPagerAdapter extends FragmentPagerAdapter {
 
-        List<Set<CourseIndex>> indexes;
+        CourseIndexWrapper wrapper;
 
-        public WeekPagerAdapter(FragmentManager fm, List<Set<CourseIndex>> indexes) {
+        public WeekPagerAdapter(FragmentManager fm) {
             super(fm);
-            this.indexes = indexes;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return TableWeekFragment.newInstance(indexes, position + 1);
+            return TableWeekFragment.newInstance(wrapper.indexes, position + 1);
         }
 
         @Override
         public int getCount() {
-            // indexes.get(0) has no value
-            return indexes == null ? 0 : indexes.size() - 1;
+            // wrapper.indexes.get(0) has no value
+            return wrapper == null || wrapper.indexes == null ? 0 : wrapper.indexes.size() - 1;
         }
     }
 

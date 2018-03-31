@@ -1,11 +1,9 @@
 package com.andreamapp.cqu.login;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.andreamapp.cqu.R;
+import com.andreamapp.cqu.base.BaseModelActivity;
 import com.andreamapp.cqu.bean.User;
 import com.andreamapp.cqu.table.TableFragment;
 import com.andreamapp.cqu.utils.API;
@@ -22,7 +21,7 @@ import com.andreamapp.cqu.utils.API;
  * Created by Andream on 2018/2/27.
  */
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends BaseModelActivity<User> {
 
     private ProgressBar mLoginProgress;
     private View mLoginForm;
@@ -93,14 +92,18 @@ public class LoginActivity extends AppCompatActivity{
             isLogining = true;
             hideInputMethod();
             showProgress(true);
-            mUserViewModel.fetch(studentNum, password).observe(this, new Observer<User>() {
-                @Override
-                public void onChanged(@Nullable User user) {
-                    isLogining = false;
-//                    showProgress(false);
-                    startActivity(new Intent(LoginActivity.this, TableFragment.class));
-                }
-            });
+            mUserViewModel.fetch(studentNum, password).observe(this, this);
+        }
+    }
+
+    @Override
+    public void onChanged(@Nullable User user) {
+        super.onChanged(user);
+        isLogining = false;
+        if (user != null) {
+            if (user.status()) {
+                startActivity(new Intent(LoginActivity.this, TableFragment.class));
+            }
         }
     }
 

@@ -33,12 +33,13 @@ public class GradeRepository {
 
         @Override
         protected Grade doInBackground(Void... args) {
-            // TODO: Network status handling, keep error in user object, rather than return null
-            Grade grade = null;
+            Grade grade = new Grade();
             try {
                 grade = API.getGrade(App.context());
             } catch (IOException e) {
                 e.printStackTrace();
+                grade.status = false;
+                grade.err = "网络错误";
             }
             return grade;
         }

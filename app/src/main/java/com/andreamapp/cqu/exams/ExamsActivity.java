@@ -1,12 +1,10 @@
 package com.andreamapp.cqu.exams;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.andreamapp.cqu.R;
+import com.andreamapp.cqu.base.BaseModelActivity;
 import com.andreamapp.cqu.bean.Exams;
 
 /**
@@ -25,7 +24,7 @@ import com.andreamapp.cqu.bean.Exams;
  */
 
 // TODO: Add empty view
-public class ExamsActivity extends AppCompatActivity {
+public class ExamsActivity extends BaseModelActivity<Exams> {
 
     Toolbar mToolBar;
     SwipeRefreshLayout mRefresh;
@@ -73,20 +72,24 @@ public class ExamsActivity extends AppCompatActivity {
         SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mViewModel.fetch().observe(ExamsActivity.this, new Observer<Exams>() {
-                    @Override
-                    public void onChanged(@Nullable Exams exams) {
-                        mAdapter.setExams(exams);
-                        mAdapter.notifyDataSetChanged();
-                        mRefresh.setRefreshing(false);
-                    }
-                });
+                mViewModel.fetch().observe(ExamsActivity.this, ExamsActivity.this);
             }
         };
         mRefresh.setOnRefreshListener(listener);
 
         mRefresh.setRefreshing(true);
         listener.onRefresh();
+    }
+
+    @Override
+    public void onChanged(@Nullable Exams exams) {
+        super.onChanged(exams);
+
+        mRefresh.setRefreshing(false);
+        if (exams != null && exams.status()) {
+            mAdapter.setExams(exams);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     public static class ExamsAdapter extends RecyclerView.Adapter<ExamsAdapter.ViewHolder> {

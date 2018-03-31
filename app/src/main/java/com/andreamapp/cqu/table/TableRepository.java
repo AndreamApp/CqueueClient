@@ -9,8 +9,6 @@ import com.andreamapp.cqu.bean.Table;
 import com.andreamapp.cqu.utils.API;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Andream on 2018/3/24.
@@ -36,8 +34,8 @@ public class TableRepository {
      *
      * @return LiveData<Table>
      */
-    public static LiveData<List<Set<CourseIndex>>> courseIndexes() {
-        MutableLiveData<List<Set<CourseIndex>>> table = new MutableLiveData<>();
+    public static LiveData<CourseIndexWrapper> courseIndexes() {
+        MutableLiveData<CourseIndexWrapper> table = new MutableLiveData<>();
         new CourseIndexTask(table).execute();
         return table;
     }
@@ -54,11 +52,13 @@ public class TableRepository {
 
         @Override
         protected Table doInBackground(Void... voids) {
-            Table table = null;
+            Table table = new Table();
             try {
                 table = API.getTable(App.context());
             } catch (IOException e) {
                 e.printStackTrace();
+                table.status = false;
+                table.err = "网络错误";
             }
             return table;
         }
@@ -72,27 +72,30 @@ public class TableRepository {
     /**
      * 获取课表的异步任务
      */
-    public static class CourseIndexTask extends AsyncTask<Void, Void, List<Set<CourseIndex>>> {
-        MutableLiveData<List<Set<CourseIndex>>> liveData;
+    public static class CourseIndexTask extends AsyncTask<Void, Void, CourseIndexWrapper> {
+        MutableLiveData<CourseIndexWrapper> liveData;
 
-        public CourseIndexTask(MutableLiveData<List<Set<CourseIndex>>> table) {
+        public CourseIndexTask(MutableLiveData<CourseIndexWrapper> table) {
             this.liveData = table;
         }
 
         @Override
-        protected List<Set<CourseIndex>> doInBackground(Void... voids) {
-            List<Set<CourseIndex>> indexes = null;
+        protected CourseIndexWrapper doInBackground(Void... voids) {
+            CourseIndexWrapper indexes = new CourseIndexWrapper();
             try {
                 Table table = API.getTable(App.context());
                 indexes = CourseIndex.generate(table);
             } catch (IOException e) {
                 e.printStackTrace();
+                indexes.source = new Table();
+                indexes.source.status = false;
+                indexes.source.err = "网络错误";
             }
             return indexes;
         }
 
         @Override
-        protected void onPostExecute(List<Set<CourseIndex>> indexes) {
+        protected void onPostExecute(CourseIndexWrapper indexes) {
             this.liveData.setValue(indexes);
         }
     }

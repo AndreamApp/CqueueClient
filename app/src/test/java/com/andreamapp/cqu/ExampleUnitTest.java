@@ -14,7 +14,6 @@ public class ExampleUnitTest {
     public void addition_isCorrect() throws Exception {
 
         Calendar c = Calendar.getInstance();
-        // Todo: Fetch it from network
         c.set(2018, Calendar.MARCH, 5, 0, 0, 0);
 
         long a = Calendar.getInstance().getTimeInMillis();

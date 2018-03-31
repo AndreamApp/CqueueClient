@@ -34,12 +34,13 @@ public class ExamsRepository {
 
         @Override
         protected Exams doInBackground(Void... args) {
-            // TODO: Network status handling, keep error in user object, rather than return null
-            Exams exams = null;
+            Exams exams = new Exams();
             try {
                 exams = API.getExams(App.context());
             } catch (IOException e) {
                 e.printStackTrace();
+                exams.status = false;
+                exams.err = "网络错误";
             }
             return exams;
         }

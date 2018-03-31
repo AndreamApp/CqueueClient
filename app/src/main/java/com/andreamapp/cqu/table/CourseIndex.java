@@ -78,7 +78,8 @@ public class CourseIndex implements Comparable<CourseIndex> {
         }
     }
 
-    public static List<Set<CourseIndex>> generate(Table table) {
+    public static CourseIndexWrapper generate(Table table) {
+
         List<Set<CourseIndex>> res = new ArrayList<>(MAX_WEEK_NUM + 1);
         for (int i = 0; i < MAX_WEEK_NUM + 1; i++) {
             res.add(new TreeSet<CourseIndex>());
@@ -92,7 +93,11 @@ public class CourseIndex implements Comparable<CourseIndex> {
                 }
             }
         }
-        return res;
+
+        CourseIndexWrapper wrapper = new CourseIndexWrapper();
+        wrapper.source = table;
+        wrapper.indexes = res;
+        return wrapper;
     }
 
     @Override
@@ -105,4 +110,5 @@ public class CourseIndex implements Comparable<CourseIndex> {
         }
         return this.weekday - o.weekday;
     }
+
 }
