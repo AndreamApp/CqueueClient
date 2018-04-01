@@ -63,7 +63,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
         // setup model, and refresh
         mTableViewModel = ViewModelProviders.of(this).get(TableViewModel.class);
         mRefresh.setEnabled(false);
-        refresh();
+        refresh(false);
 
         // setup tool bar and menu
         setSupportActionBar(mToolBar);
@@ -78,7 +78,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
                         startActivity(new Intent(TableFragment.this, GradeActivity.class));
                         break;
                     case R.id.action_refresh_table:
-                        refresh();
+                        refresh(true);
                         break;
                 }
                 return true;
@@ -105,12 +105,12 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
         });
     }
 
-    public void refresh() {
+    public void refresh(boolean fromNetwork) {
         if (mAdapter.getCount() == 0) {
             showState("正在加载...");
         }
         mRefresh.setRefreshing(true);
-        mTableViewModel.fetchIndexes().observe(this, this);
+        mTableViewModel.fetchIndexes(fromNetwork).observe(this, this);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
                 showState("请求出错，点击重试", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        refresh();
+                        refresh(true);
                     }
                 });
             }

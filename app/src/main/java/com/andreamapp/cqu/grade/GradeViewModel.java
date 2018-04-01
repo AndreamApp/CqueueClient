@@ -14,8 +14,8 @@ import com.andreamapp.cqu.bean.Grade;
 public class GradeViewModel extends ViewModel {
     LiveData<Grade> data;
 
-    LiveData<Grade> fetch() {
-        this.data = GradeRepository.fetch();
+    LiveData<Grade> fetch(boolean fromNetwork) {
+        this.data = GradeRepository.fetch(fromNetwork);
         return this.data;
     }
 }

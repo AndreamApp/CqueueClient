@@ -54,14 +54,14 @@ public class GradeActivity extends BaseModelActivity<Grade> {
         mViewModel = ViewModelProviders.of(this).get(GradeViewModel.class);
         mPagerAdapter = new SemesterPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
-        refresh(null);
+        refresh(false, null);
     }
 
-    public void refresh(final GradeSemesterFragment fragment) {
+    public void refresh(boolean fromNetwork, final GradeSemesterFragment fragment) {
         if (mPagerAdapter.getCount() == 0) {
             showState("正在加载...");
         }
-        mViewModel.fetch().observe(this, new Observer<Grade>() {
+        mViewModel.fetch(fromNetwork).observe(this, new Observer<Grade>() {
             @Override
             public void onChanged(@Nullable Grade grade) {
                 // Call for msg snack bar
@@ -90,7 +90,7 @@ public class GradeActivity extends BaseModelActivity<Grade> {
                         showState("请求出错，点击重试", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                refresh(fragment);
+                                refresh(true, fragment);
                             }
                         });
                     }
@@ -179,7 +179,7 @@ public class GradeActivity extends BaseModelActivity<Grade> {
                 @Override
                 public void onRefresh() {
                     if (getActivity() != null) {
-                        ((GradeActivity) getActivity()).refresh(GradeSemesterFragment.this);
+                        ((GradeActivity) getActivity()).refresh(true, GradeSemesterFragment.this);
                     }
                 }
             });

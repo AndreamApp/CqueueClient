@@ -16,13 +16,13 @@ import com.androidnetworking.error.ANError;
 
 public class GradeRepository {
 
-    public static LiveData<Grade> fetch() {
+    public static LiveData<Grade> fetch(boolean fromNetwork) {
         MutableLiveData<Grade> data = new MutableLiveData<>();
-        new GradeTask(data).execute();
+        new GradeTask(data).execute(fromNetwork);
         return data;
     }
 
-    public static class GradeTask extends AsyncTask<Void, Void, Grade> {
+    public static class GradeTask extends AsyncTask<Boolean, Void, Grade> {
         MutableLiveData<Grade> res;
 
         GradeTask(MutableLiveData<Grade> res) {
@@ -30,10 +30,10 @@ public class GradeRepository {
         }
 
         @Override
-        protected Grade doInBackground(Void... args) {
+        protected Grade doInBackground(Boolean... fromNetwork) {
             Grade grade = new Grade();
             try {
-                grade = API.getGrade();
+                grade = API.getGrade(fromNetwork[0]);
             } catch (ANError e) {
                 e.printStackTrace();
                 grade.status = false;

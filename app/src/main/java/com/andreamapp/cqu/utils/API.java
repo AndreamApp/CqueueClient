@@ -18,9 +18,17 @@ import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersisto
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
@@ -37,15 +45,59 @@ import okhttp3.Response;
 
 public class API {
 
-    public static final String HOST = "http://39.107.228.154";
+    public static final String HOST = "https://39.107.228.154";
     public static final String URL_LOGIN = "/api/login";
     public static final String URL_GET_TABLE = "/api/getTable";
     public static final String URL_GET_GRADE = "/api/getGrade";
     public static final String URL_GET_EXAMS = "/api/getExams";
 
+
+    public static OkHttpClient.Builder trustAll() {
+        // Create a trust manager that does not validate certificate chains
+        final TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+                    @Override
+                    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                    }
+
+                    @Override
+                    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                    }
+
+                    @Override
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return new java.security.cert.X509Certificate[]{};
+                    }
+                }
+        };
+
+        SSLContext sslContext = null;
+        try {
+            // Install the all-trusting trust manager
+            sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            // Create an ssl socket factory with our all-trusting manager
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        final SSLSocketFactory sslSocketFactory = sslContext == null ? null : sslContext.getSocketFactory();
+
+        return new OkHttpClient.Builder()
+                .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0])
+                .hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+    }
+
     public static OkHttpClient withCookie(Context context) {
         CookieJar cookieJar =  new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
-        OkHttpClient client = new OkHttpClient.Builder()
+
+        OkHttpClient client = trustAll()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
@@ -61,7 +113,7 @@ public class API {
                 return new ArrayList<Cookie>();
             }
         };
-        OkHttpClient client = new OkHttpClient.Builder()
+        OkHttpClient client = trustAll()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
@@ -94,6 +146,7 @@ public class API {
                 .addQueryParameter("password", password)
                 .setPriority(Priority.LOW)
                 .setOkHttpClient(withSaveOnlyCookie(App.context()))
+                .getResponseOnlyFromNetwork()
                 .build();
         ANResponse<User> response = request.executeForObject(User.class);
 
@@ -104,11 +157,19 @@ public class API {
         }
     }
 
-    public static Table getTable() throws ANError {
-        ANRequest request = AndroidNetworking.get(HOST + URL_GET_TABLE)
+    public static Table getTable(boolean fromNetwork) throws ANError {
+        ANRequest.GetRequestBuilder builder = AndroidNetworking.get(HOST + URL_GET_TABLE)
                 .setPriority(Priority.LOW)
-                .setOkHttpClient(withCookie(App.context()))
-                .build();
+                .setMaxAgeCacheControl(1, TimeUnit.SECONDS)
+                .setMaxStaleCacheControl(2, TimeUnit.MINUTES)
+                .setOkHttpClient(withCookie(App.context()));
+        if (!fromNetwork) {
+            builder.getResponseOnlyIfCached();
+        } else {
+            builder.getResponseOnlyFromNetwork();
+        }
+
+        ANRequest request = builder.build();
         ANResponse<Table> response = request.executeForObject(Table.class);
 
         if (response.isSuccess()) {
@@ -118,11 +179,17 @@ public class API {
         }
     }
 
-    public static Grade getGrade() throws ANError {
-        ANRequest request = AndroidNetworking.get(HOST + URL_GET_GRADE)
+    public static Grade getGrade(boolean fromNetwork) throws ANError {
+        ANRequest.GetRequestBuilder builder = AndroidNetworking.get(HOST + URL_GET_GRADE)
                 .setPriority(Priority.LOW)
-                .setOkHttpClient(withCookie(App.context()))
-                .build();
+                .setMaxAgeCacheControl(1, TimeUnit.SECONDS)
+                .setMaxStaleCacheControl(2, TimeUnit.MINUTES)
+                .setOkHttpClient(withCookie(App.context()));
+        if (!fromNetwork) {
+            builder.getResponseOnlyIfCached();
+        }
+
+        ANRequest request = builder.build();
         ANResponse<Grade> response = request.executeForObject(Grade.class);
 
         if (response.isSuccess()) {
@@ -132,11 +199,17 @@ public class API {
         }
     }
 
-    public static Exams getExams() throws ANError {
-        ANRequest request = AndroidNetworking.get(HOST + URL_GET_EXAMS)
+    public static Exams getExams(boolean fromNetwork) throws ANError {
+        ANRequest.GetRequestBuilder builder = AndroidNetworking.get(HOST + URL_GET_EXAMS)
                 .setPriority(Priority.LOW)
-                .setOkHttpClient(withCookie(App.context()))
-                .build();
+                .setMaxAgeCacheControl(1, TimeUnit.SECONDS)
+                .setMaxStaleCacheControl(2, TimeUnit.MINUTES)
+                .setOkHttpClient(withCookie(App.context()));
+        if (!fromNetwork) {
+            builder.getResponseOnlyIfCached();
+        }
+
+        ANRequest request = builder.build();
         ANResponse<Exams> response = request.executeForObject(Exams.class);
 
         if (response.isSuccess()) {

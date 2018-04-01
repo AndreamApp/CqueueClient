@@ -33,9 +33,9 @@ public class TableRepository {
      *
      * @return LiveData<Table>
      */
-    public static LiveData<CourseIndexWrapper> courseIndexes() {
+    public static LiveData<CourseIndexWrapper> courseIndexes(boolean fromNetwork) {
         MutableLiveData<CourseIndexWrapper> table = new MutableLiveData<>();
-        new CourseIndexTask(table).execute();
+        new CourseIndexTask(table).execute(fromNetwork);
         return table;
     }
 
@@ -54,7 +54,7 @@ public class TableRepository {
             Table table = new Table();
             try {
                 long start = System.currentTimeMillis();
-                table = API.getTable();
+                table = API.getTable(true);
                 long end = System.currentTimeMillis();
                 Log.i("HTTPTest", "" + (end - start) + "ms");
             } catch (ANError e) {
@@ -74,7 +74,7 @@ public class TableRepository {
     /**
      * 获取课表的异步任务
      */
-    public static class CourseIndexTask extends AsyncTask<Void, Void, CourseIndexWrapper> {
+    public static class CourseIndexTask extends AsyncTask<Boolean, Void, CourseIndexWrapper> {
         MutableLiveData<CourseIndexWrapper> liveData;
 
         public CourseIndexTask(MutableLiveData<CourseIndexWrapper> table) {
@@ -82,10 +82,10 @@ public class TableRepository {
         }
 
         @Override
-        protected CourseIndexWrapper doInBackground(Void... voids) {
+        protected CourseIndexWrapper doInBackground(Boolean... fromNetwork) {
             CourseIndexWrapper indexes = new CourseIndexWrapper();
             try {
-                Table table = API.getTable();
+                Table table = API.getTable(fromNetwork[0]);
                 indexes = CourseIndex.generate(table);
             } catch (ANError e) {
                 e.printStackTrace();

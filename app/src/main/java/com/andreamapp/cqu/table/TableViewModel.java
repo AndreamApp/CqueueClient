@@ -20,8 +20,8 @@ public class TableViewModel extends ViewModel {
         return this.data;
     }
 
-    LiveData<CourseIndexWrapper> fetchIndexes() {
-        this.indexes = TableRepository.courseIndexes();
+    LiveData<CourseIndexWrapper> fetchIndexes(boolean fromNetwork) {
+        this.indexes = TableRepository.courseIndexes(fromNetwork);
         return this.indexes;
     }
 

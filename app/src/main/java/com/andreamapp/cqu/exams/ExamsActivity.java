@@ -72,22 +72,22 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
         SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refresh();
+                refresh(true);
             }
         };
         mRefresh.setOnRefreshListener(listener);
 
         // perform refresh in programming way
         mRefresh.setRefreshing(true);
-        refresh();
+        refresh(false);
     }
 
 
-    public void refresh() {
+    public void refresh(boolean fromNetwork) {
         if (mAdapter.getItemCount() == 0) {
             showState("正在加载...");
         }
-        mViewModel.fetch().observe(ExamsActivity.this, ExamsActivity.this);
+        mViewModel.fetch(fromNetwork).observe(ExamsActivity.this, ExamsActivity.this);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
                 showState("请求出错，点击重试", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        refresh();
+                        refresh(true);
                     }
                 });
             }

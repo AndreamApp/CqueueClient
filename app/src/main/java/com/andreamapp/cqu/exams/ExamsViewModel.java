@@ -15,8 +15,8 @@ public class ExamsViewModel extends ViewModel {
 
     LiveData<Exams> data;
 
-    LiveData<Exams> fetch() {
-        this.data = ExamsRepository.fetch();
+    LiveData<Exams> fetch(boolean fromNetwork) {
+        this.data = ExamsRepository.fetch(fromNetwork);
         return this.data;
     }
 }

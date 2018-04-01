@@ -16,14 +16,14 @@ import com.androidnetworking.error.ANError;
 
 public class ExamsRepository {
 
-    public static LiveData<Exams> fetch() {
+    public static LiveData<Exams> fetch(boolean fromNetwork) {
         MutableLiveData<Exams> data = new MutableLiveData<>();
-        new ExamsTask(data).execute();
+        new ExamsTask(data).execute(fromNetwork);
         return data;
     }
 
 
-    public static class ExamsTask extends AsyncTask<Void, Void, Exams> {
+    public static class ExamsTask extends AsyncTask<Boolean, Void, Exams> {
         MutableLiveData<Exams> res;
 
         ExamsTask(MutableLiveData<Exams> res) {
@@ -31,10 +31,10 @@ public class ExamsRepository {
         }
 
         @Override
-        protected Exams doInBackground(Void... args) {
+        protected Exams doInBackground(Boolean... fromNetwork) {
             Exams exams = new Exams();
             try {
-                exams = API.getExams();
+                exams = API.getExams(fromNetwork[0]);
             } catch (ANError e) {
                 e.printStackTrace();
                 exams.status = false;
