@@ -4,11 +4,9 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 
-import com.andreamapp.cqu.App;
 import com.andreamapp.cqu.bean.Grade;
 import com.andreamapp.cqu.utils.API;
-
-import java.io.IOException;
+import com.androidnetworking.error.ANError;
 
 /**
  * Created by Andream on 2018/3/27.
@@ -35,11 +33,17 @@ public class GradeRepository {
         protected Grade doInBackground(Void... args) {
             Grade grade = new Grade();
             try {
-                grade = API.getGrade(App.context());
-            } catch (IOException e) {
+                grade = API.getGrade();
+            } catch (ANError e) {
                 e.printStackTrace();
                 grade.status = false;
-                grade.err = "网络错误";
+                switch (e.getErrorCode()) {
+                    case 0:
+                        grade.err = "网络错误";
+                        break;
+                    default:
+                        grade.err = e.getErrorCode() + ": " + e.getErrorDetail();
+                }
             }
             return grade;
         }

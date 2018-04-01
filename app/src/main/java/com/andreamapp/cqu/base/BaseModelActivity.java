@@ -18,6 +18,7 @@ import com.andreamapp.cqu.bean.Resp;
 
 public class BaseModelActivity<T extends Resp> extends AppCompatActivity implements Observer<T> {
 
+
     @Override
     public void onChanged(@Nullable T t) {
         if (t.status()) {

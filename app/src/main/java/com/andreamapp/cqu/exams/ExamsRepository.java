@@ -4,11 +4,9 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 
-import com.andreamapp.cqu.App;
 import com.andreamapp.cqu.bean.Exams;
 import com.andreamapp.cqu.utils.API;
-
-import java.io.IOException;
+import com.androidnetworking.error.ANError;
 
 /**
  * Created by Andream on 2018/3/27.
@@ -36,11 +34,17 @@ public class ExamsRepository {
         protected Exams doInBackground(Void... args) {
             Exams exams = new Exams();
             try {
-                exams = API.getExams(App.context());
-            } catch (IOException e) {
+                exams = API.getExams();
+            } catch (ANError e) {
                 e.printStackTrace();
                 exams.status = false;
-                exams.err = "网络错误";
+                switch (e.getErrorCode()) {
+                    case 0:
+                        exams.err = "网络错误";
+                        break;
+                    default:
+                        exams.err = e.getErrorCode() + ": " + e.getErrorDetail();
+                }
             }
             return exams;
         }

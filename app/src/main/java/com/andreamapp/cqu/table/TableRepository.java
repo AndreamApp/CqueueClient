@@ -5,11 +5,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.andreamapp.cqu.App;
 import com.andreamapp.cqu.bean.Table;
 import com.andreamapp.cqu.utils.API;
-
-import java.io.IOException;
+import com.androidnetworking.error.ANError;
 
 /**
  * Created by Andream on 2018/3/24.
@@ -56,13 +54,13 @@ public class TableRepository {
             Table table = new Table();
             try {
                 long start = System.currentTimeMillis();
-                table = API.getTable(App.context());
+                table = API.getTable();
                 long end = System.currentTimeMillis();
                 Log.i("HTTPTest", "" + (end - start) + "ms");
-            } catch (IOException e) {
+            } catch (ANError e) {
                 e.printStackTrace();
                 table.status = false;
-                table.err = "网络错误";
+                table.err = e.getErrorCode() + ": " + e.getErrorBody(); //"网络错误";
             }
             return table;
         }
@@ -87,13 +85,19 @@ public class TableRepository {
         protected CourseIndexWrapper doInBackground(Void... voids) {
             CourseIndexWrapper indexes = new CourseIndexWrapper();
             try {
-                Table table = API.getTable(App.context());
+                Table table = API.getTable();
                 indexes = CourseIndex.generate(table);
-            } catch (IOException e) {
+            } catch (ANError e) {
                 e.printStackTrace();
                 indexes.source = new Table();
                 indexes.source.status = false;
-                indexes.source.err = "网络错误";
+                switch (e.getErrorCode()) {
+                    case 0:
+                        indexes.source.err = "网络错误";
+                        break;
+                    default:
+                        indexes.source.err = e.getErrorCode() + ": " + e.getErrorDetail();
+                }
             }
             return indexes;
         }

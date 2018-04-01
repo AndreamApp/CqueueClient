@@ -1,13 +1,13 @@
 package com.andreamapp.cqu;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.andreamapp.cqu.bean.Exams;
+import com.andreamapp.cqu.bean.Grade;
 import com.andreamapp.cqu.bean.Table;
 import com.andreamapp.cqu.bean.User;
-import com.andreamapp.cqu.table.TableRepository;
 import com.andreamapp.cqu.utils.API;
 
 import org.junit.Test;
@@ -29,14 +29,13 @@ public class ExampleInstrumentedTest {
 
         assertEquals("com.andreamapp.cqu", appContext.getPackageName());
 
-        User user = API.login(appContext, "20151597", "976655");
-        Table table = API.getTable(appContext);
-        for (int i = 0; i < 1; i++) {
-            MutableLiveData<Table> res = new MutableLiveData<>();
-            new TableRepository.FetchTableTask(res).execute();
-//            Grade grade = API.getGrade(appContext);
-//            Exams exams = API.getExams(appContext);
-        }
-        int i;
+    }
+
+    @Test
+    public void test() throws Exception {
+        User user = API.login("20151597", "976655");
+        Table table = API.getTable();
+        Grade grade = API.getGrade();
+        Exams exams = API.getExams();
     }
 }

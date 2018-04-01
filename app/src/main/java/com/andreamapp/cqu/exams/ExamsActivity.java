@@ -82,6 +82,7 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
         refresh();
     }
 
+
     public void refresh() {
         if (mAdapter.getItemCount() == 0) {
             showState("正在加载...");

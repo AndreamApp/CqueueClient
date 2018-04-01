@@ -2,10 +2,16 @@ package com.andreamapp.cqu.utils;
 
 import android.content.Context;
 
+import com.andreamapp.cqu.App;
 import com.andreamapp.cqu.bean.Exams;
 import com.andreamapp.cqu.bean.Grade;
 import com.andreamapp.cqu.bean.Table;
 import com.andreamapp.cqu.bean.User;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
@@ -37,7 +43,7 @@ public class API {
     public static final String URL_GET_GRADE = "/api/getGrade";
     public static final String URL_GET_EXAMS = "/api/getExams";
 
-    private static OkHttpClient withCookie(Context context){
+    public static OkHttpClient withCookie(Context context) {
         CookieJar cookieJar =  new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
         OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
@@ -48,7 +54,7 @@ public class API {
         return client;
     }
 
-    private static OkHttpClient withSaveOnlyCookie(Context context){
+    public static OkHttpClient withSaveOnlyCookie(Context context) {
         CookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context)){
             @Override
             public synchronized List<Cookie> loadForRequest(HttpUrl url) {
@@ -82,6 +88,65 @@ public class API {
         return res;
     }
 
+    public static User login(String stunum, String password) throws ANError {
+        ANRequest request = AndroidNetworking.get(HOST + URL_LOGIN)
+                .addQueryParameter("stunum", stunum)
+                .addQueryParameter("password", password)
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(withSaveOnlyCookie(App.context()))
+                .build();
+        ANResponse<User> response = request.executeForObject(User.class);
+
+        if (response.isSuccess()) {
+            return response.getResult();
+        } else {
+            throw response.getError();
+        }
+    }
+
+    public static Table getTable() throws ANError {
+        ANRequest request = AndroidNetworking.get(HOST + URL_GET_TABLE)
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(withCookie(App.context()))
+                .build();
+        ANResponse<Table> response = request.executeForObject(Table.class);
+
+        if (response.isSuccess()) {
+            return response.getResult();
+        } else {
+            throw response.getError();
+        }
+    }
+
+    public static Grade getGrade() throws ANError {
+        ANRequest request = AndroidNetworking.get(HOST + URL_GET_GRADE)
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(withCookie(App.context()))
+                .build();
+        ANResponse<Grade> response = request.executeForObject(Grade.class);
+
+        if (response.isSuccess()) {
+            return response.getResult();
+        } else {
+            throw response.getError();
+        }
+    }
+
+    public static Exams getExams() throws ANError {
+        ANRequest request = AndroidNetworking.get(HOST + URL_GET_EXAMS)
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(withCookie(App.context()))
+                .build();
+        ANResponse<Exams> response = request.executeForObject(Exams.class);
+
+        if (response.isSuccess()) {
+            return response.getResult();
+        } else {
+            throw response.getError();
+        }
+    }
+
+    @Deprecated
     public static User login(Context context, String stunum, String password) throws IOException {
         OkHttpClient client = withSaveOnlyCookie(context);
         Request request = new Request.Builder()
@@ -90,12 +155,12 @@ public class API {
         Response response = client.newCall(request).execute();
         if (response.code() == 200) {
             return new Gson().fromJson(response.body().string(), User.class);
-        }
-        else {
+        } else {
             throw new IOException("Response with code " + response.code());
         }
     }
 
+    @Deprecated
     public static Table getTable(Context context) throws IOException {
         OkHttpClient client = withCookie(context);
         Request request = new Request.Builder()
@@ -104,12 +169,12 @@ public class API {
         Response response = client.newCall(request).execute();
         if (response.code() == 200) {
             return new Gson().fromJson(response.body().string(), Table.class);
-        }
-        else {
+        } else {
             throw new IOException("Response with code " + response.code());
         }
     }
 
+    @Deprecated
     public static Grade getGrade(Context context) throws IOException {
         OkHttpClient client = withCookie(context);
         Request request = new Request.Builder()
@@ -118,12 +183,12 @@ public class API {
         Response response = client.newCall(request).execute();
         if (response.code() == 200) {
             return new Gson().fromJson(response.body().string(), Grade.class);
-        }
-        else {
+        } else {
             throw new IOException("Response with code " + response.code());
         }
     }
 
+    @Deprecated
     public static Exams getExams(Context context) throws IOException {
         OkHttpClient client = withCookie(context);
         Request request = new Request.Builder()
@@ -132,8 +197,7 @@ public class API {
         Response response = client.newCall(request).execute();
         if (response.code() == 200) {
             return new Gson().fromJson(response.body().string(), Exams.class);
-        }
-        else {
+        } else {
             throw new IOException("Response with code " + response.code());
         }
     }

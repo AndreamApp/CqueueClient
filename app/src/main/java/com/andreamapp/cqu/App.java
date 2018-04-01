@@ -2,6 +2,8 @@ package com.andreamapp.cqu;
 
 import android.app.Application;
 
+import com.androidnetworking.AndroidNetworking;
+
 /**
  * Created by Andream on 2018/3/24.
  * Email: andreamapp@qq.com
@@ -16,6 +18,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         context = this;
+
+        // init network
+        AndroidNetworking.initialize(this);
     }
 
     public static Application context() {

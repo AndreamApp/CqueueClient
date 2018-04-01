@@ -7,30 +7,28 @@ import com.andreamapp.cqu.bean.User;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by Andream on 2018/3/20.
  */
 public class APITest {
     @Test
     public void login() throws Exception {
-        User user = API.login(null, "20151597", "976655");
+        User user = API.login("20151597", "976655");
     }
 
     @Test
     public void getTable() throws Exception {
-        Table table = API.getTable(null);
+        Table table = API.getTable();
     }
 
     @Test
     public void getGrade() throws Exception {
-        Grade grade = API.getGrade(null);
+        Grade grade = API.getGrade();
     }
 
     @Test
     public void getExams() throws Exception {
-        Exams exams = API.getExams(null);
+        Exams exams = API.getExams();
     }
 
 }
