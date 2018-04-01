@@ -26,13 +26,13 @@ import com.andreamapp.cqu.bean.Exams;
 // TODO: Add empty view
 public class ExamsActivity extends BaseModelActivity<Exams> {
 
-    Toolbar mToolBar;
-    SwipeRefreshLayout mRefresh;
-    RecyclerView mExamsRecyclerView;
-    ExamsAdapter mAdapter;
-    LinearLayoutManager mLayoutManager;
+    Toolbar mToolBar;                   // App tool bar
+    SwipeRefreshLayout mRefresh;        // Refresh exams
+    RecyclerView mExamsRecyclerView;    // Show exams
+    ExamsAdapter mAdapter;              // Exams adapter
+    LinearLayoutManager mLayoutManager; // LayoutManager
 
-    ExamsViewModel mViewModel;
+    ExamsViewModel mViewModel;          // Exams model
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,9 +45,9 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
 
         setSupportActionBar(mToolBar);
 
+        // setup recycler
         mAdapter = new ExamsAdapter();
         mExamsRecyclerView.setAdapter(mAdapter);
-
         mLayoutManager = new LinearLayoutManager(this);
         mExamsRecyclerView.setLayoutManager(mLayoutManager);
 
@@ -72,13 +72,21 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
         SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mViewModel.fetch().observe(ExamsActivity.this, ExamsActivity.this);
+                refresh();
             }
         };
         mRefresh.setOnRefreshListener(listener);
 
+        // perform refresh in programming way
         mRefresh.setRefreshing(true);
-        listener.onRefresh();
+        refresh();
+    }
+
+    public void refresh() {
+        if (mAdapter.getItemCount() == 0) {
+            showState("正在加载...");
+        }
+        mViewModel.fetch().observe(ExamsActivity.this, ExamsActivity.this);
     }
 
     @Override
@@ -89,7 +97,36 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
         if (exams != null && exams.status()) {
             mAdapter.setExams(exams);
             mAdapter.notifyDataSetChanged();
+
+            // show empty
+            if (mAdapter.getItemCount() == 0) {
+                showState("暂无考试信息");
+            }
+            // show content
+            else {
+                hideState();
+            }
+        } else {
+            // show error
+            if (mAdapter.getItemCount() == 0) {
+                showState("请求出错，点击重试", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        refresh();
+                    }
+                });
+            }
+            // keep old data
+            else {
+                hideState();
+            }
         }
+    }
+
+    @Override
+    protected boolean showState(boolean show, CharSequence msg, View.OnClickListener clickHandler) {
+        mExamsRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+        return super.showState(show, msg, clickHandler);
     }
 
     public static class ExamsAdapter extends RecyclerView.Adapter<ExamsAdapter.ViewHolder> {

@@ -3,6 +3,7 @@ package com.andreamapp.cqu.table;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.andreamapp.cqu.App;
 import com.andreamapp.cqu.bean.Table;
@@ -54,7 +55,10 @@ public class TableRepository {
         protected Table doInBackground(Void... voids) {
             Table table = new Table();
             try {
+                long start = System.currentTimeMillis();
                 table = API.getTable(App.context());
+                long end = System.currentTimeMillis();
+                Log.i("HTTPTest", "" + (end - start) + "ms");
             } catch (IOException e) {
                 e.printStackTrace();
                 table.status = false;

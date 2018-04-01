@@ -13,9 +13,24 @@
         android:background="?attr/colorPrimary"
         app:titleTextColor="@android:color/white" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/grade_pager"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/grade_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/state_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:focusable="true"
+            android:clickable="true" />
+
+    </FrameLayout>
 
 </LinearLayout>

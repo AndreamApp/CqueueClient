@@ -9,9 +9,6 @@ import com.andreamapp.cqu.utils.API;
 
 import org.junit.Test;
 
-import java.util.List;
-import java.util.Set;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -32,7 +29,7 @@ public class CourseIndexTest {
         Table table = API.getTable(appContext);
         for (int i = 0; i < 100; i++) {
             long start = System.currentTimeMillis();
-            List<Set<CourseIndex>> res = CourseIndex.generate(table);
+            CourseIndexWrapper res = CourseIndex.generate(table);
             long end = System.currentTimeMillis();
             long use = end - start;
             System.out.print(use);

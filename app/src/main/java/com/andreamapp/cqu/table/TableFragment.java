@@ -34,38 +34,38 @@ import java.util.Set;
  * Website: http://andreamapp.com
  */
 
-// TODO: Add course detail popup window
 // TODO: Add week selector popup window
 // TODO: Add semester selector
 public class TableFragment extends BaseModelActivity<CourseIndexWrapper> implements TableView.OnCourseClickListener {
 
-    Toolbar mToolBar;
-    ViewPager mViewPager;
-    WeekPagerAdapter mAdapter;
-    SwipeRefreshLayout mRefresh;
-    TableViewModel mTableViewModel;
-    int mThisWeekNum;
+    Toolbar mToolBar;                   // App top bar, show current week and menu
+    ViewPager mViewPager;               // Table pager, every page show a week's courses
+    WeekPagerAdapter mAdapter;          // Table pager adapter
+    SwipeRefreshLayout mRefresh;        // refresher, only show it in programming, as it conflicts with pager
 
-    Calendar semesterStartDate;
+    TableViewModel mTableViewModel;     // Table model, provide the data source from network or cache
+    int mThisWeekNum;                   // Record current week
+    Calendar semesterStartDate;         // Record the startup date of semester, for calculating current week
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.table_fragment);
 
-//        mTableView = findViewById(R.id.table_view);
         mToolBar = findViewById(R.id.tool_bar);
         mRefresh = findViewById(R.id.refresh);
         mViewPager = findViewById(R.id.table_view_pager);
 
-
+        // setup adapter
         mAdapter = new WeekPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
 
+        // setup model, and refresh
         mTableViewModel = ViewModelProviders.of(this).get(TableViewModel.class);
         mRefresh.setEnabled(false);
         refresh();
 
+        // setup tool bar and menu
         setSupportActionBar(mToolBar);
         mToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -106,6 +106,9 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
     }
 
     public void refresh() {
+        if (mAdapter.getCount() == 0) {
+            showState("正在加载...");
+        }
         mRefresh.setRefreshing(true);
         mTableViewModel.fetchIndexes().observe(this, this);
     }
@@ -122,7 +125,37 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
             // Todo: Fetch it from network
             c.set(2018, Calendar.MARCH, 5, 0, 0, 0);
             setSemesterStartDate(c);
+
+            // show empty
+            if (mAdapter.getCount() == 0) {
+                showState("暂无课表信息");
+            }
+            // show content
+            else {
+                hideState();
+            }
+        } else {
+            // show error
+            if (mAdapter.getCount() == 0) {
+                showState("请求出错，点击重试", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        refresh();
+                    }
+                });
+            }
+            // keep old data
+            else {
+                hideState();
+            }
         }
+    }
+
+    @Override
+    protected boolean showState(boolean show, CharSequence msg, View.OnClickListener clickHandler) {
+        // content visibility as opposed to state's
+        mViewPager.setVisibility(show ? View.GONE : View.VISIBLE);
+        return super.showState(show, msg, clickHandler);
     }
 
     @Override

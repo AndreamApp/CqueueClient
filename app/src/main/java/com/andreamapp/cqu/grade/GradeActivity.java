@@ -58,6 +58,9 @@ public class GradeActivity extends BaseModelActivity<Grade> {
     }
 
     public void refresh(final GradeSemesterFragment fragment) {
+        if (mPagerAdapter.getCount() == 0) {
+            showState("正在加载...");
+        }
         mViewModel.fetch().observe(this, new Observer<Grade>() {
             @Override
             public void onChanged(@Nullable Grade grade) {
@@ -71,9 +74,39 @@ public class GradeActivity extends BaseModelActivity<Grade> {
                 if (grade != null && grade.status()) {
                     mPagerAdapter.setGrade(grade);
                     mPagerAdapter.notifyDataSetChanged();
+
+
+                    // show empty
+                    if (mPagerAdapter.getCount() == 0) {
+                        showState("暂无成绩信息");
+                    }
+                    // show pager content
+                    else {
+                        hideState();
+                    }
+                } else {
+                    // show error
+                    if (mPagerAdapter.getCount() == 0) {
+                        showState("请求出错，点击重试", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                refresh(fragment);
+                            }
+                        });
+                    }
+                    // keep old data
+                    else {
+                        hideState();
+                    }
                 }
             }
         });
+    }
+
+    @Override
+    protected boolean showState(boolean show, CharSequence msg, View.OnClickListener clickHandler) {
+        mPager.setVisibility(show ? View.GONE : View.VISIBLE);
+        return super.showState(show, msg, clickHandler);
     }
 
     class SemesterPagerAdapter extends FragmentPagerAdapter {
