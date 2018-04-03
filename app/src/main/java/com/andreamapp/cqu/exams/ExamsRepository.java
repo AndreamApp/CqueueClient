@@ -42,6 +42,11 @@ public class ExamsRepository {
                     case 0:
                         exams.err = "网络错误";
                         break;
+                    case 504:
+                        // No cache error, fetch it from network
+                        if (!fromNetwork[0]) {
+                            return doInBackground(Boolean.TRUE);
+                        }
                     default:
                         exams.err = e.getErrorCode() + ": " + e.getErrorDetail();
                 }

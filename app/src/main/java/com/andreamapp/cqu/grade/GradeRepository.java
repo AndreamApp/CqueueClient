@@ -41,6 +41,10 @@ public class GradeRepository {
                     case 0:
                         grade.err = "网络错误";
                         break;
+                    case 504:
+                        if (!fromNetwork[0]) {
+                            return doInBackground(Boolean.TRUE);
+                        }
                     default:
                         grade.err = e.getErrorCode() + ": " + e.getErrorDetail();
                 }

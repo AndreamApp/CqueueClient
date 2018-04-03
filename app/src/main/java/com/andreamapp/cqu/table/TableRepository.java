@@ -95,6 +95,10 @@ public class TableRepository {
                     case 0:
                         indexes.source.err = "网络错误";
                         break;
+                    case 504:
+                        if (!fromNetwork[0]) {
+                            return doInBackground(Boolean.TRUE);
+                        }
                     default:
                         indexes.source.err = e.getErrorCode() + ": " + e.getErrorDetail();
                 }
