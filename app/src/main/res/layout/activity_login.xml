@@ -41,9 +41,9 @@
                     android:id="@+id/login_student_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="学号"
+                    android:hint="@string/login_stunum_hint"
                     android:maxLines="1"
-                    android:text="20151597"
+                    android:inputType="numberDecimal"
                     android:singleLine="true"/>
 
             </android.support.design.widget.TextInputLayout>
@@ -59,11 +59,7 @@
                     android:id="@+id/login_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="教务网密码"
-                    android:text="976655"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
+                    android:hint="@string/login_pass_hint"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"/>
@@ -78,7 +74,7 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
-                android:text="登录"
+                android:text="@string/login"
                 android:textStyle="bold"/>
 
         </LinearLayout>

@@ -21,7 +21,7 @@ public class BaseModelActivity<T extends Resp> extends AppCompatActivity impleme
 
     @Override
     public void onChanged(@Nullable T t) {
-        if (t.status()) {
+        if (t != null && t.status()) {
             String msg = t.msg();
             if (msg != null) {
                 Snackbar.make(getWindow().getDecorView(), msg, Snackbar.LENGTH_SHORT).show();
@@ -40,16 +40,18 @@ public class BaseModelActivity<T extends Resp> extends AppCompatActivity impleme
      * Subclass can override this method to add related action as state changed.
      *
      * @param show         show or hide
-     * @param msg          the message would show
+     * @param resId          the message would show
      * @param clickHandler the action when click state text
      * @return return false if has no TextView with id R.id.state_text
      */
-    protected boolean showState(boolean show, CharSequence msg, View.OnClickListener clickHandler) {
+    protected boolean showState(boolean show, int resId, View.OnClickListener clickHandler) {
         TextView stateText = findViewById(R.id.state_text);
         if (stateText != null) {
             if (show) {
+                if (resId > 0) {
+                    stateText.setText(getResources().getString(resId));
+                }
                 stateText.setVisibility(View.VISIBLE);
-                stateText.setText(msg);
                 stateText.setOnClickListener(clickHandler);
             } else {
                 stateText.setVisibility(View.GONE);
@@ -62,25 +64,25 @@ public class BaseModelActivity<T extends Resp> extends AppCompatActivity impleme
     /**
      * Show the state text with specified msg and clickHandler
      *
-     * @param msg          the message would show
+     * @param resId          the message would show
      * @param clickHandler the action when click state text
      * @return return false if has no TextView with id R.id.state_text
      */
-    protected boolean showState(CharSequence msg, View.OnClickListener clickHandler) {
-        return showState(true, msg, clickHandler);
+    protected boolean showState(int resId, View.OnClickListener clickHandler) {
+        return showState(true, resId, clickHandler);
     }
 
     /**
      * convenient for showState(CharSequence msg, View.OnClickListener clickHandler)
      *
-     * @param msg the message would show
+     * @param resId the message would show
      * @return return false if has no TextView with id R.id.state_text
      */
-    protected boolean showState(CharSequence msg) {
-        return showState(msg, null);
+    protected boolean showState(int resId) {
+        return showState(resId, null);
     }
 
     protected boolean hideState() {
-        return showState(false, "", null);
+        return showState(false, 0, null);
     }
 }

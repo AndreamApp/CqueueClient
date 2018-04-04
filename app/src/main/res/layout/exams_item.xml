@@ -23,8 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:textColor="@color/colorPrimary"
-                android:text="科技翻译" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/exams_item_time"
@@ -32,8 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textSize="14sp"
-                android:textColor="#333333"
-                android:text="2018-01-17 14:30:00" />
+                android:textColor="#333333" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -45,8 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textSize="14sp"
-                    android:textColor="#333333"
-                    android:text="D区D一教学楼D1143" />
+                    android:textColor="#333333" />
 
                 <TextView
                     android:id="@+id/exams_item_seat"
@@ -55,11 +52,9 @@
                     android:layout_marginTop="8dp"
                     android:layout_alignParentEnd="true"
                     android:textSize="14sp"
-                    android:textColor="#333333"
-                    android:text="座位号：5" />
+                    android:textColor="#333333" />
 
             </RelativeLayout>
-
 
         </LinearLayout>
 

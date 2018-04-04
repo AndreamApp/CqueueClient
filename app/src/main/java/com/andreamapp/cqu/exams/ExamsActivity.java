@@ -85,7 +85,7 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
 
     public void refresh(boolean fromNetwork) {
         if (mAdapter.getItemCount() == 0) {
-            showState("正在加载...");
+            showState(R.string.state_loading);
         }
         mViewModel.fetch(fromNetwork).observe(ExamsActivity.this, ExamsActivity.this);
     }
@@ -101,7 +101,7 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
 
             // show empty
             if (mAdapter.getItemCount() == 0) {
-                showState("暂无考试信息");
+                showState(R.string.state_no_exams);
             }
             // show content
             else {
@@ -110,7 +110,7 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
         } else {
             // show error
             if (mAdapter.getItemCount() == 0) {
-                showState("请求出错，点击重试", new View.OnClickListener() {
+                showState(R.string.state_request_error, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         refresh(true);
@@ -125,9 +125,9 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
     }
 
     @Override
-    protected boolean showState(boolean show, CharSequence msg, View.OnClickListener clickHandler) {
+    protected boolean showState(boolean show, int resId, View.OnClickListener clickHandler) {
         mExamsRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-        return super.showState(show, msg, clickHandler);
+        return super.showState(show, resId, clickHandler);
     }
 
     public static class ExamsAdapter extends RecyclerView.Adapter<ExamsAdapter.ViewHolder> {
@@ -146,8 +146,7 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
         @Override
         public ExamsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.exams_item, parent, false);
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
+            return new ViewHolder(v);
         }
 
         @Override
@@ -166,12 +165,12 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
-        public static class ViewHolder extends RecyclerView.ViewHolder {
+        static class ViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
             TextView name, time, classroom, seat;
             Exams.Exam exam;
 
-            public ViewHolder(View v) {
+            ViewHolder(View v) {
                 super(v);
                 name = v.findViewById(R.id.exams_item_name);
                 time = v.findViewById(R.id.exams_item_time);
@@ -179,12 +178,12 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
                 seat = v.findViewById(R.id.exams_item_seat);
             }
 
-            public void bind(Exams.Exam exam) {
+            void bind(Exams.Exam exam) {
                 this.exam = exam;
                 name.setText(exam.course_name);
                 time.setText(exam.time_str);
                 classroom.setText(exam.classroom);
-                seat.setText("座位号：" + exam.seat);
+                seat.setText(seat.getResources().getString(R.string.exams_item_seat, exam.seat));
             }
         }
     }

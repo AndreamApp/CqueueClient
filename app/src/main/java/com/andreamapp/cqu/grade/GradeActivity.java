@@ -59,7 +59,7 @@ public class GradeActivity extends BaseModelActivity<Grade> {
 
     public void refresh(boolean fromNetwork, final GradeSemesterFragment fragment) {
         if (mPagerAdapter.getCount() == 0) {
-            showState("正在加载...");
+            showState(R.string.state_loading);
         }
         mViewModel.fetch(fromNetwork).observe(this, new Observer<Grade>() {
             @Override
@@ -78,7 +78,7 @@ public class GradeActivity extends BaseModelActivity<Grade> {
 
                     // show empty
                     if (mPagerAdapter.getCount() == 0) {
-                        showState("暂无成绩信息");
+                        showState(R.string.state_no_grade);
                     }
                     // show pager content
                     else {
@@ -87,7 +87,7 @@ public class GradeActivity extends BaseModelActivity<Grade> {
                 } else {
                     // show error
                     if (mPagerAdapter.getCount() == 0) {
-                        showState("请求出错，点击重试", new View.OnClickListener() {
+                        showState(R.string.state_request_error, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 refresh(true, fragment);
@@ -104,9 +104,9 @@ public class GradeActivity extends BaseModelActivity<Grade> {
     }
 
     @Override
-    protected boolean showState(boolean show, CharSequence msg, View.OnClickListener clickHandler) {
+    protected boolean showState(boolean show, int resId, View.OnClickListener clickHandler) {
         mPager.setVisibility(show ? View.GONE : View.VISIBLE);
-        return super.showState(show, msg, clickHandler);
+        return super.showState(show, resId, clickHandler);
     }
 
     class SemesterPagerAdapter extends FragmentPagerAdapter {
@@ -166,7 +166,7 @@ public class GradeActivity extends BaseModelActivity<Grade> {
             mRefresh = v.findViewById(R.id.refresh);
 
             mTitleText.setText(sg.semester);
-            mGpaText.setText("GPA: " + sg.gpa);
+            mGpaText.setText(getString(R.string.grade_gpa_text, sg.gpa));
 
             mAdapter = new GradeAdapter();
             mAdapter.setSemesterGrade(sg);
@@ -199,10 +199,9 @@ public class GradeActivity extends BaseModelActivity<Grade> {
     }
 
     public static class GradeAdapter extends RecyclerView.Adapter<GradeAdapter.ViewHolder> {
-        @NonNull
         Grade.SemesterGrade sg;
 
-        public void setSemesterGrade(Grade.SemesterGrade sg) {
+        void setSemesterGrade(Grade.SemesterGrade sg) {
             this.sg = sg;
             notifyDataSetChanged();
         }
@@ -211,8 +210,7 @@ public class GradeActivity extends BaseModelActivity<Grade> {
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.grade_item, parent, false);
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
+            return new ViewHolder(v);
         }
 
         @Override
@@ -231,12 +229,12 @@ public class GradeActivity extends BaseModelActivity<Grade> {
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
-        public static class ViewHolder extends RecyclerView.ViewHolder {
+        static class ViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
             TextView name, credit, score;
             Grade.SemesterGrade.CourseGrade courseGrade;
 
-            public ViewHolder(View v) {
+            ViewHolder(View v) {
                 super(v);
                 name = v.findViewById(R.id.grade_item_course_name);
                 credit = v.findViewById(R.id.grade_item_credit);

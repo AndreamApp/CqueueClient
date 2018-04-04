@@ -1,16 +1,37 @@
 <resources>
-    <string name="app_name">课程表</string>
+    <string name="app_name">Cqueue</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="table_week_one">第1周</string>
+    <string name="table_header_week_1">周一</string>
+    <string name="table_header_week_2">周二</string>
+    <string name="table_header_week_3">周三</string>
+    <string name="table_header_week_4">周四</string>
+    <string name="table_header_week_5">周五</string>
+    <string name="table_header_week_6">周六</string>
+    <string name="table_header_week_7">周日</string>
+
+    <string name="state_loading">正在加载…</string>
+    <string name="state_no_exams">暂无考试信息</string>
+    <string name="state_request_error">请求出错，点击重试</string>
+    <string name="state_no_grade">暂无成绩信息</string>
+    <string name="state_no_table">暂无课表信息</string>
+
+    <string name="login_stunum_hint">学号</string>
+    <string name="login_pass_hint">教务网密码</string>
+    <string name="login">登录</string>
+    <string name="login_error_input_pass">请输入密码</string>
+    <string name="login_error_shorter_6">密码不能少于6位</string>
+    <string name="login_error_longer_16">密码不能大于16位</string>
+    <string name="login_error_input_stunum">请输入学号</string>
+    <string name="login_error_stunum_too_short">学号太短了！</string>
+    <string name="login_error_stunum_too_long">学号太长了！</string>
+    <string name="login_error_num_only">学号只能包含数字</string>
+
+    <string name="course_detail_item_teacher">%s（任课教师）</string>
+    <string name="course_detail_item_classroom">%s（上课地点）</string>
+    <string name="course_detail_item_credit">%s（学分）</string>
+    <string name="course_detail_item_hours_all">%s（总学时）</string>
+    <string name="grade_gpa_text">GPA: %s</string>
+    <string name="exams_item_seat">座位号：%s</string>
+
 </resources>

@@ -12,7 +12,7 @@
         android:gravity="center"
         android:background="?attr/colorPrimary"
         app:titleTextColor="@android:color/white"
-        app:title="第1周">
+        app:title="@string/table_week_one">
 
     </android.support.v7.widget.Toolbar>
 
@@ -45,12 +45,5 @@
         </FrameLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
-    <!--<com.andreamapp.cqu.table.TableView-->
-    <!--android:id="@+id/table_view"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
-
-    <!--</com.andreamapp.cqu.table.TableView>-->
 
 </LinearLayout>

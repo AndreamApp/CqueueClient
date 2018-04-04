@@ -107,7 +107,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
 
     public void refresh(boolean fromNetwork) {
         if (mAdapter.getCount() == 0) {
-            showState("正在加载...");
+            showState(R.string.state_loading);
         }
         mRefresh.setRefreshing(true);
         mTableViewModel.fetchIndexes(fromNetwork).observe(this, this);
@@ -128,7 +128,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
 
             // show empty
             if (mAdapter.getCount() == 0) {
-                showState("暂无课表信息");
+                showState(R.string.state_no_table);
             }
             // show content
             else {
@@ -137,7 +137,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
         } else {
             // show error
             if (mAdapter.getCount() == 0) {
-                showState("请求出错，点击重试", new View.OnClickListener() {
+                showState(R.string.state_no_table, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         refresh(true);
@@ -152,10 +152,10 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
     }
 
     @Override
-    protected boolean showState(boolean show, CharSequence msg, View.OnClickListener clickHandler) {
+    protected boolean showState(boolean show, int resId, View.OnClickListener clickHandler) {
         // content visibility as opposed to state's
         mViewPager.setVisibility(show ? View.GONE : View.VISIBLE);
-        return super.showState(show, msg, clickHandler);
+        return super.showState(show, resId, clickHandler);
     }
 
     @Override
@@ -199,7 +199,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
 
         CourseIndexWrapper wrapper;
 
-        public WeekPagerAdapter(FragmentManager fm) {
+        WeekPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -290,10 +290,10 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
             this.courseIndex = courseIndex;
             if (courseIndex != null && courseIndex.course != null) {
                 courseName.setText(courseIndex.course.course_name);
-                teacherName.setText(courseIndex.course.teacher + "（任课教师）");
-                classroom.setText(courseIndex.classroom + "（上课地点）");
-                credit.setText(courseIndex.course.credit + "（学分）");
-                hours.setText(courseIndex.course.hours_all + "（总学时）");
+                teacherName.setText(getString(R.string.course_detail_item_teacher, courseIndex.course.teacher));
+                classroom.setText(getString(R.string.course_detail_item_classroom, courseIndex.classroom));
+                credit.setText(getString(R.string.course_detail_item_credit, courseIndex.course.credit));
+                hours.setText(getString(R.string.course_detail_item_hours_all, courseIndex.course.hours_all));
             }
         }
     }

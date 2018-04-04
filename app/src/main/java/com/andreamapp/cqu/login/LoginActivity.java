@@ -129,15 +129,15 @@ public class LoginActivity extends BaseModelActivity<User> {
      * */
     private String checkPassword(String password){
         if(TextUtils.isEmpty(password)){
-            return "请输入密码";
+            return getString(R.string.login_error_input_pass);
         }
         String error = null;
         final int L = password.length();
         if(L < 6){
-            error = "密码不能少于6位";
+            error = getString(R.string.login_error_shorter_6);
         }
         else if(L > 16){
-            error = "密码不能大于16位";
+            error = getString(R.string.login_error_longer_16);
         }
         return error;
     }
@@ -148,21 +148,21 @@ public class LoginActivity extends BaseModelActivity<User> {
      * */
     private String checkStudentNum(String studentNum){
         if(TextUtils.isEmpty(studentNum)){
-            return "请输入学号";
+            return getString(R.string.login_error_input_stunum);
         }
         String error = null;
         final int L = studentNum.length();
         if(L < 8){
-            error = "学号太短了！";
+            error = getString(R.string.login_error_stunum_too_short);
         }
         else if(L > 8){
-            error = "学号太长了！";
+            error = getString(R.string.login_error_stunum_too_long);
         }
         else{
             for(int i = 0; i < L; i++){
                 char c = studentNum.charAt(i);
                 if(!(c >= '0' && c <= '9')){
-                    error = "学号只能包含数字";
+                    error = getString(R.string.login_error_num_only);
                     break;
                 }
             }
