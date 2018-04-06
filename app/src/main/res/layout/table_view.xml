@@ -10,67 +10,39 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="0dp"
+            style="@style/TableHeaderTextView"
             android:layout_height="wrap_content"
-            android:text="@string/table_header_week_1"
-            android:textColor="?attr/tableHeaderTextColor"
-            android:gravity="center"
-            android:padding="2dp"
-            android:layout_weight="1.0" />
+            android:text="@string/table_header_week_1" />
 
         <TextView
-            android:layout_width="0dp"
+            style="@style/TableHeaderTextView"
             android:layout_height="wrap_content"
-            android:text="@string/table_header_week_2"
-            android:textColor="?attr/tableHeaderTextColor"
-            android:gravity="center"
-            android:padding="2dp"
-            android:layout_weight="1.0" />
+            android:text="@string/table_header_week_2" />
 
         <TextView
-            android:layout_width="0dp"
+            style="@style/TableHeaderTextView"
             android:layout_height="wrap_content"
-            android:text="@string/table_header_week_3"
-            android:textColor="?attr/tableHeaderTextColor"
-            android:gravity="center"
-            android:padding="2dp"
-            android:layout_weight="1.0" />
+            android:text="@string/table_header_week_3" />
 
         <TextView
-            android:layout_width="0dp"
+            style="@style/TableHeaderTextView"
             android:layout_height="wrap_content"
-            android:text="@string/table_header_week_4"
-            android:textColor="?attr/tableHeaderTextColor"
-            android:gravity="center"
-            android:padding="2dp"
-            android:layout_weight="1.0" />
+            android:text="@string/table_header_week_4" />
 
         <TextView
-            android:layout_width="0dp"
+            style="@style/TableHeaderTextView"
             android:layout_height="wrap_content"
-            android:text="@string/table_header_week_5"
-            android:textColor="?attr/tableHeaderTextColor"
-            android:gravity="center"
-            android:padding="2dp"
-            android:layout_weight="1.0" />
+            android:text="@string/table_header_week_5" />
 
         <TextView
-            android:layout_width="0dp"
+            style="@style/TableHeaderTextView"
             android:layout_height="wrap_content"
-            android:text="@string/table_header_week_6"
-            android:textColor="?attr/tableHeaderTextColor"
-            android:gravity="center"
-            android:padding="2dp"
-            android:layout_weight="1.0" />
+            android:text="@string/table_header_week_6" />
 
         <TextView
-            android:layout_width="0dp"
+            style="@style/TableHeaderTextView"
             android:layout_height="wrap_content"
-            android:text="@string/table_header_week_7"
-            android:textColor="?attr/tableHeaderTextColor"
-            android:gravity="center"
-            android:padding="2dp"
-            android:layout_weight="1.0" />
+            android:text="@string/table_header_week_7" />
 
     </LinearLayout>
 
@@ -87,61 +59,32 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/table_layout_weekday_1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:padding="2dp"
-                android:orientation="vertical"
-                android:layout_weight="1.0" />
-
+                style="@style/TableColumnLinearLayout"
+                android:id="@+id/table_layout_weekday_1" />
 
             <LinearLayout
-                android:id="@+id/table_layout_weekday_2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:padding="2dp"
-                android:orientation="vertical"
-                android:layout_weight="1.0" />
+                style="@style/TableColumnLinearLayout"
+                android:id="@+id/table_layout_weekday_2" />
 
             <LinearLayout
-                android:id="@+id/table_layout_weekday_3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:padding="2dp"
-                android:orientation="vertical"
-                android:layout_weight="1.0" />
+                style="@style/TableColumnLinearLayout"
+                android:id="@+id/table_layout_weekday_3" />
 
             <LinearLayout
-                android:id="@+id/table_layout_weekday_4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:padding="2dp"
-                android:orientation="vertical"
-                android:layout_weight="1.0" />
+                style="@style/TableColumnLinearLayout"
+                android:id="@+id/table_layout_weekday_4" />
 
             <LinearLayout
-                android:id="@+id/table_layout_weekday_5"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:padding="2dp"
-                android:orientation="vertical"
-                android:layout_weight="1.0" />
+                style="@style/TableColumnLinearLayout"
+                android:id="@+id/table_layout_weekday_5" />
 
             <LinearLayout
-                android:id="@+id/table_layout_weekday_6"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:padding="2dp"
-                android:orientation="vertical"
-                android:layout_weight="1.0" />
+                style="@style/TableColumnLinearLayout"
+                android:id="@+id/table_layout_weekday_6" />
 
             <LinearLayout
-                android:id="@+id/table_layout_weekday_7"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:padding="2dp"
-                android:orientation="vertical"
-                android:layout_weight="1.0" />
+                style="@style/TableColumnLinearLayout"
+                android:id="@+id/table_layout_weekday_7" />
         </LinearLayout>
     </ScrollView>
 
