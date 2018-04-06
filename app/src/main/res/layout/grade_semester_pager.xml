@@ -21,6 +21,7 @@
                 android:id="@+id/grade_semester_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
                 android:gravity="center"
                 android:textSize="20sp" />
 

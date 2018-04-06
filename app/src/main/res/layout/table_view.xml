@@ -13,6 +13,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/table_header_week_1"
+            android:textColor="?attr/tableHeaderTextColor"
             android:gravity="center"
             android:padding="2dp"
             android:layout_weight="1.0" />
@@ -21,6 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/table_header_week_2"
+            android:textColor="?attr/tableHeaderTextColor"
             android:gravity="center"
             android:padding="2dp"
             android:layout_weight="1.0" />
@@ -29,6 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/table_header_week_3"
+            android:textColor="?attr/tableHeaderTextColor"
             android:gravity="center"
             android:padding="2dp"
             android:layout_weight="1.0" />
@@ -37,6 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/table_header_week_4"
+            android:textColor="?attr/tableHeaderTextColor"
             android:gravity="center"
             android:padding="2dp"
             android:layout_weight="1.0" />
@@ -45,6 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/table_header_week_5"
+            android:textColor="?attr/tableHeaderTextColor"
             android:gravity="center"
             android:padding="2dp"
             android:layout_weight="1.0" />
@@ -53,6 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/table_header_week_6"
+            android:textColor="?attr/tableHeaderTextColor"
             android:gravity="center"
             android:padding="2dp"
             android:layout_weight="1.0" />
@@ -61,6 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/table_header_week_7"
+            android:textColor="?attr/tableHeaderTextColor"
             android:gravity="center"
             android:padding="2dp"
             android:layout_weight="1.0" />

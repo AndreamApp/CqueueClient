@@ -9,8 +9,8 @@
         android:id="@+id/course_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="?attr/courseDetailNameTextColor"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/course_teacher_name"
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textSize="16sp"
-        android:textColor="#444444" />
+        android:textColor="?attr/courseDetailItemTextColor" />
 
     <TextView
         android:id="@+id/course_classroom"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:textSize="16sp"
-        android:textColor="#444444" />
+        android:textColor="?attr/courseDetailItemTextColor" />
 
     <TextView
         android:id="@+id/course_credit"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:textSize="16sp"
-        android:textColor="#444444" />
+        android:textColor="?attr/courseDetailItemTextColor" />
 
     <TextView
         android:id="@+id/course_hours"
@@ -42,6 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:textSize="16sp"
-        android:textColor="#444444" />
+        android:textColor="?attr/courseDetailItemTextColor" />
 
 </LinearLayout>

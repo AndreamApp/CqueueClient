@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#6f81e4</color>
+    <color name="colorPrimary">#c4c4c4</color>
+    <color name="colorPrimaryDark">#b1b1b1</color>
+    <color name="colorAccent">#f1f1f1</color>
+
+    <color name="textColorLight">#333333</color>
+    <color name="textColorDark">#dedede</color>
+    <color name="textColorHint">#9f9f9f</color>
+
+    <drawable name="window_bg_dark">#303030</drawable>
+    <drawable name="window_bg_translucent">#80000000</drawable>
 </resources>

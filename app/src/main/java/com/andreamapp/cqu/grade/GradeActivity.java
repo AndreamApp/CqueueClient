@@ -28,11 +28,6 @@ import com.andreamapp.cqu.bean.Grade;
  * Website: http://andreamapp.com
  */
 
-
-/**
- * Card Semester
- * SwipeRefresh
- */
 public class GradeActivity extends BaseModelActivity<Grade> {
 
     Toolbar mToolBar;
@@ -175,6 +170,10 @@ public class GradeActivity extends BaseModelActivity<Grade> {
             mLayoutManager = new LinearLayoutManager(getContext());
             mGradeRecyclerView.setLayoutManager(mLayoutManager);
 
+            GradeActivity activity = (GradeActivity) getActivity();
+            if (activity != null) {
+                mRefresh.setColorSchemeColors(activity.getPrimiryColor(), activity.getPrimiryColor(), activity.getAccentColor());
+            }
             mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {

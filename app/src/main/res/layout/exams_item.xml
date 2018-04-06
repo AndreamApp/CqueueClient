@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="?attr/colorPrimary" />
 
             <TextView
                 android:id="@+id/exams_item_time"
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textSize="14sp"
-                android:textColor="#333333" />
+                android:textColor="?attr/examsItemTextColor" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textSize="14sp"
-                    android:textColor="#333333" />
+                    android:textColor="?attr/examsItemTextColor" />
 
                 <TextView
                     android:id="@+id/exams_item_seat"
@@ -52,7 +52,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_alignParentEnd="true"
                     android:textSize="14sp"
-                    android:textColor="#333333" />
+                    android:textColor="?attr/examsItemTextColor" />
 
             </RelativeLayout>
 

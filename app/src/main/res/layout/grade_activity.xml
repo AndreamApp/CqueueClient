@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="?attr/colorPrimary"
-        app:titleTextColor="@android:color/white" />
+        android:background="?attr/toolBarColor"
+        app:titleTextColor="?attr/foreTextColor" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -28,6 +28,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="20sp"
+            android:textColor="?attr/hintTextColor"
             android:focusable="true"
             android:clickable="true" />
 

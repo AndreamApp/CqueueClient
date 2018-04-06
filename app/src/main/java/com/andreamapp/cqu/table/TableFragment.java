@@ -62,6 +62,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
 
         // setup model, and refresh
         mTableViewModel = ViewModelProviders.of(this).get(TableViewModel.class);
+        mRefresh.setColorSchemeColors(getPrimiryColor(), getPrimiryColor(), getAccentColor());
         mRefresh.setEnabled(false);
         refresh(false);
 

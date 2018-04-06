@@ -75,6 +75,7 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
                 refresh(true);
             }
         };
+        mRefresh.setColorSchemeColors(getPrimiryColor(), getPrimiryColor(), getAccentColor());
         mRefresh.setOnRefreshListener(listener);
 
         // perform refresh in programming way

@@ -1,9 +1,12 @@
 package com.andreamapp.cqu.base;
 
 import android.arch.lifecycle.Observer;
+import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,10 +21,39 @@ import com.andreamapp.cqu.bean.Resp;
 
 public class BaseModelActivity<T extends Resp> extends AppCompatActivity implements Observer<T> {
 
+    @ColorInt
+    int primiryColor;
+    @ColorInt
+    int accentColor;
+
+    public @ColorInt
+    int getPrimiryColor() {
+        return primiryColor;
+    }
+
+    public int getAccentColor() {
+        return accentColor;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TypedValue typedValue = new TypedValue();
+
+        getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        primiryColor = typedValue.data;
+
+        getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
+        accentColor = typedValue.data;
+    }
 
     @Override
     public void onChanged(@Nullable T t) {
-        if (t != null && t.status()) {
+        if (t == null) {
+            return;
+        }
+        if (t.status()) {
             String msg = t.msg();
             if (msg != null) {
                 Snackbar.make(getWindow().getDecorView(), msg, Snackbar.LENGTH_SHORT).show();

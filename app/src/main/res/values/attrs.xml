@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CQueueTheme">
+        <!-- Basic color -->
+        <attr format="color" name="toolBarColor" />
+        <attr format="color" name="colorPrimary" />
+        <attr format="color" name="colorPrimaryDark" />
+        <attr format="color" name="colorAccent" />
+
+        <!-- General text color -->
+        <attr format="color" name="foreTextColor" />
+        <attr format="color" name="hintTextColor" />
+
+        <!-- Table ui color -->
+        <attr format="color" name="tableHeaderTextColor" />
+        <attr format="color" name="courseTextColor" />
+        <attr format="color" name="tableItemBg" />
+        <attr format="color" name="tableItemBgPressed" />
+
+        <attr format="color" name="courseDetailNameTextColor" />
+        <attr format="color" name="courseDetailItemTextColor" />
+
+        <!-- Other text color -->
+        <attr format="color" name="examsItemTextColor" />
+        <attr format="color" name="gradeItemTextColor" />
+    </declare-styleable>
+
+</resources>

@@ -95,14 +95,19 @@ public class TableView extends RelativeLayout {
 
             // fill empty gap with empty view
             if (index.sectionStart - lastSection > 1) {
-                for (int i = lastSection + 1; i < index.sectionStart; i++) {
-                    CourseView empty = new CourseView(getContext());
-                    empty.emptySection(1);
-                    MarginLayoutParams lp = new MarginLayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT);
-                    lp.bottomMargin = getResources().getDimensionPixelSize(R.dimen.table_item_margin);
-                    layout.addView(empty, lp);
+                for (int i = lastSection + 1; i < index.sectionStart; ) {
+                    int sections = Math.min(index.sectionStart - i, 2);
+                    // fill every two sections
+                    if (sections > 0) {
+                        CourseView empty = new CourseView(getContext());
+                        empty.emptySection(sections);
+                        MarginLayoutParams lp = new MarginLayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
+                        lp.bottomMargin = getResources().getDimensionPixelSize(R.dimen.table_item_margin);
+                        layout.addView(empty, lp);
+                        i += sections;
+                    }
                 }
             }
 
@@ -145,6 +150,7 @@ public class TableView extends RelativeLayout {
 
         public void emptySection(int sections) {
             setHeight(sections * getResources().getDimensionPixelSize(R.dimen.table_item_height));
+            setBackgroundResource(R.drawable.table_item_empty_bg);
         }
 
         public void setCourse(CourseIndex index) {
