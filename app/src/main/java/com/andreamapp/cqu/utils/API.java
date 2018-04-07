@@ -170,7 +170,7 @@ public class API {
                 .putString("user_profile", "")
                 .apply();
 
-        ANRequest request = AndroidNetworking.get(HOST + URL_LOGOUT)
+        ANRequest request = AndroidNetworking.post(HOST + URL_LOGOUT)
                 .setPriority(Priority.LOW)
                 .setOkHttpClient(withCookie(App.context()))
                 .getResponseOnlyFromNetwork()
@@ -192,9 +192,9 @@ public class API {
     }
 
     public static User login(String stunum, String password) throws ANError {
-        ANRequest request = AndroidNetworking.get(HOST + URL_LOGIN)
-                .addQueryParameter("stunum", stunum)
-                .addQueryParameter("password", password)
+        ANRequest request = AndroidNetworking.post(HOST + URL_LOGIN)
+                .addBodyParameter("stunum", stunum)
+                .addBodyParameter("password", password)
                 .setPriority(Priority.LOW)
                 .setOkHttpClient(withSaveOnlyCookie(App.context()))
                 .getResponseOnlyFromNetwork()
