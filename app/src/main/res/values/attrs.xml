@@ -18,11 +18,16 @@
         <attr format="color" name="tableItemBg" />
         <attr format="color" name="tableItemBgPressed" />
 
+        <attr format="color" name="courseDetailBgColor" />
         <attr format="color" name="courseDetailNameTextColor" />
         <attr format="color" name="courseDetailItemTextColor" />
 
         <!-- Other text color -->
+        <attr format="color" name="examsCardBgColor" />
+        <attr format="color" name="examsNameTextColor" />
         <attr format="color" name="examsItemTextColor" />
+
+        <attr format="color" name="gradeCardBgColor" />
         <attr format="color" name="gradeItemTextColor" />
     </declare-styleable>
 

@@ -103,7 +103,12 @@ public class LoginActivity extends BaseModelActivity<User> {
         if (user != null) {
             if (user.status()) {
                 startActivity(new Intent(LoginActivity.this, TableFragment.class));
+                finish();
+            } else {
+                showProgress(false);
             }
+        } else {
+            showProgress(false);
         }
     }
 

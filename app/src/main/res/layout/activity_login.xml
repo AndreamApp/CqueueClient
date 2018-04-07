@@ -33,6 +33,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHint="?attr/hintTextColor"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
                 android:paddingTop="12dp" >
@@ -43,6 +44,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/login_stunum_hint"
                     android:maxLines="1"
+                    android:textColor="?attr/foreTextColor"
+                    android:textColorHint="?attr/hintTextColor"
                     android:inputType="numberDecimal"
                     android:singleLine="true"/>
 
@@ -51,6 +54,8 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHint="?attr/hintTextColor"
+                android:backgroundTint="#ffffff"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
                 android:paddingTop="12dp" >
@@ -61,6 +66,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/login_pass_hint"
                     android:inputType="textPassword"
+                    android:textColor="?attr/foreTextColor"
+                    android:textColorHint="?attr/hintTextColor"
                     android:maxLines="1"
                     android:singleLine="true"/>
 

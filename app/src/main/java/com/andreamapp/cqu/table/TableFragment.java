@@ -23,6 +23,8 @@ import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.base.BaseModelActivity;
 import com.andreamapp.cqu.exams.ExamsActivity;
 import com.andreamapp.cqu.grade.GradeActivity;
+import com.andreamapp.cqu.login.LoginActivity;
+import com.andreamapp.cqu.utils.API;
 
 import java.util.Calendar;
 import java.util.List;
@@ -36,7 +38,10 @@ import java.util.Set;
 
 // TODO: Add week selector popup window
 // TODO: Add semester selector
-public class TableFragment extends BaseModelActivity<CourseIndexWrapper> implements TableView.OnCourseClickListener {
+public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
+        implements TableView.OnCourseClickListener,
+        ConfirmReloadTableDialogFragment.Listener,
+        ProfileDialogFragment.Listener {
 
     Toolbar mToolBar;                   // App top bar, show current week and menu
     ViewPager mViewPager;               // Table pager, every page show a week's courses
@@ -79,7 +84,12 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
                         startActivity(new Intent(TableFragment.this, GradeActivity.class));
                         break;
                     case R.id.action_refresh_table:
-                        refresh(true);
+                        ConfirmReloadTableDialogFragment.newInstance()
+                                .show(getSupportFragmentManager(), "ConfirmReload");
+                        break;
+                    case R.id.action_logout:
+                        ProfileDialogFragment.newInstance(API.currentUser(TableFragment.this))
+                                .show(getSupportFragmentManager(), "Profile");
                         break;
                 }
                 return true;
@@ -196,6 +206,18 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
         CourseDetailDialogFragment.newInstance(index).show(getSupportFragmentManager(), "CourseDetail");
     }
 
+    @Override
+    public void onReloadTable() {
+        refresh(true);
+    }
+
+    @Override
+    public void onUserLogout() {
+        API.logout(this);
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+    }
+
     class WeekPagerAdapter extends FragmentPagerAdapter {
 
         CourseIndexWrapper wrapper;
@@ -298,4 +320,6 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper> impleme
             }
         }
     }
+
+
 }

@@ -15,31 +15,41 @@
         <item name="courseTextColor">#f0f0f0</item>
         <item name="tableItemBg">#e76565</item>
         <item name="tableItemBgPressed">#c14f4f</item>
-        <item name="courseDetailNameTextColor">#ef9bae</item>
+        <item name="courseDetailBgColor">#f0f0f0</item>
+        <item name="courseDetailNameTextColor">#c14f4f</item>
         <item name="courseDetailItemTextColor">#444444</item>
 
+        <item name="examsCardBgColor">#f0f0f0</item>
+        <item name="examsNameTextColor">#c14f4f</item>
         <item name="examsItemTextColor">#333333</item>
+
+        <item name="gradeCardBgColor">#f0f0f0</item>
         <item name="gradeItemTextColor">#333333</item>
     </style>
 
     <style name="AppThemeBlue" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimaryDark">#00343f</item>
-        <item name="toolBarColor">#1db0b8</item>
-        <item name="colorPrimary">#1db0b8</item>
-        <item name="colorAccent">#49cbd2</item>
+        <item name="colorPrimaryDark">#06497D</item>
+        <item name="toolBarColor">#1E73B4</item>
+        <item name="colorPrimary">#1E73B4</item>
+        <item name="colorAccent">#1E73B4</item>
 
         <item name="foreTextColor">#f8f8f8</item>
         <item name="hintTextColor">#c0c0c0</item>
 
         <item name="tableHeaderTextColor">#808080</item>
         <item name="courseTextColor">#f0f0f0</item>
-        <item name="tableItemBg">#1db0b8</item>
-        <item name="tableItemBgPressed">#00343f</item>
-        <item name="courseDetailNameTextColor">#1db0b8</item>
+        <item name="tableItemBg">#4187BC</item>
+        <item name="tableItemBgPressed">#06497D</item>
+        <item name="courseDetailBgColor">#f0f0f0</item>
+        <item name="courseDetailNameTextColor">#06497D</item>
         <item name="courseDetailItemTextColor">#444444</item>
 
+        <item name="examsCardBgColor">#f0f0f0</item>
+        <item name="examsNameTextColor">#06497D</item>
         <item name="examsItemTextColor">#333333</item>
+
+        <item name="gradeCardBgColor">#f0f0f0</item>
         <item name="gradeItemTextColor">#333333</item>
     </style>
 
@@ -54,37 +64,51 @@
         <item name="hintTextColor">#c0c0c0</item>
 
         <item name="tableHeaderTextColor">#808080</item>
-        <item name="courseTextColor">#f0f0f0</item>
+        <item name="courseTextColor">#dddddd</item>
         <item name="tableItemBg">#393939</item>
         <item name="tableItemBgPressed">#393939</item>
-        <item name="courseDetailNameTextColor">#a3a3a3</item>
-        <item name="courseDetailItemTextColor">#444444</item>
+        <item name="courseDetailBgColor">#333333</item>
+        <item name="courseDetailNameTextColor">#dddddd</item>
+        <item name="courseDetailItemTextColor">#bbbbbb</item>
 
-        <item name="examsItemTextColor">#333333</item>
-        <item name="gradeItemTextColor">#333333</item>
+        <item name="examsCardBgColor">#333333</item>
+        <item name="examsNameTextColor">#dddddd</item>
+        <item name="examsItemTextColor">#bbbbbb</item>
+
+        <item name="gradeCardBgColor">#333333</item>
+        <item name="gradeItemTextColor">#cccccc</item>
 
         <item name="android:windowBackground">@drawable/window_bg_dark</item>
     </style>
 
-    <style name="AppThemeTransparent" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="AppThemeTransparent" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimaryDark">#80292929</item>
-        <item name="toolBarColor">#80313131</item>
-        <item name="colorPrimary">#80393939</item>
-        <item name="colorAccent">#80424242</item>
+        <item name="colorPrimaryDark">#80000000</item>
+        <item name="toolBarColor">#70000000</item>
+        <item name="colorPrimary">#70000000</item>
+        <item name="colorAccent">#80000000</item>
 
-        <item name="foreTextColor">#a0f8f8f8</item>
+        <item name="foreTextColor">#c0f8f8f8</item>
         <item name="hintTextColor">#a0c0c0c0</item>
 
-        <item name="tableHeaderTextColor">#a0c0c0c0</item>
-        <item name="courseTextColor">#a0f0f0f0</item>
+        <item name="tableHeaderTextColor">#cccccccc</item>
+        <item name="courseTextColor">#a0eeeeee</item>
         <item name="tableItemBg">#50313131</item>
         <item name="tableItemBgPressed">#80313131</item>
-        <item name="courseDetailNameTextColor">#a0a3a3a3</item>
-        <item name="courseDetailItemTextColor">#a0444444</item>
+        <item name="courseDetailBgColor">#222222</item>
+        <item name="courseDetailNameTextColor">#dddddddd</item>
+        <item name="courseDetailItemTextColor">#cccccccc</item>
 
-        <item name="examsItemTextColor">#a0333333</item>
-        <item name="gradeItemTextColor">#a0333333</item>
+        <item name="examsCardBgColor">#60000000</item>
+        <item name="examsNameTextColor">#e0e0e0</item>
+        <item name="examsItemTextColor">#f0dddddd</item>
+
+        <item name="gradeCardBgColor">#60000000</item>
+        <item name="gradeItemTextColor">#dddddddd</item>
+
+        <item name="colorControlNormal">#dddddddd</item>
+        <item name="colorControlActivated">#dddddddd</item>
+        <item name="colorControlHighlight">#dddddddd</item>
 
         <item name="android:windowBackground">@drawable/window_bg_translucent</item>
         <!--<item name="android:windowIsTranslucent">true</item>-->
@@ -110,6 +134,5 @@
         <item name="android:layout_weight">1.0</item>
 
     </style>
-
 
 </resources>

@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         app:cardCornerRadius="4dp"
+        app:cardBackgroundColor="?attr/examsCardBgColor"
         app:cardElevation="2dp">
 
         <LinearLayout
@@ -23,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:textColor="?attr/colorPrimary" />
+                android:textColor="?attr/examsNameTextColor" />
 
             <TextView
                 android:id="@+id/exams_item_time"

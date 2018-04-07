@@ -33,5 +33,14 @@
     <string name="course_detail_item_hours_all">%s（总学时）</string>
     <string name="grade_gpa_text">GPA: %s</string>
     <string name="exams_item_seat">座位号：%s</string>
+    <string name="cancel">取消</string>
+    <string name="reload">重新导入</string>
+    <string name="table_reload_confirm">确定要重新导入课表吗？</string>
+    <string name="table_reload_confirm_title">提示</string>
+    <string name="logout">登出</string>
+    <string name="menu_exams">考试</string>
+    <string name="menu_grade">成绩</string>
+    <string name="menu_reload_table">重新导入课表</string>
+    <string name="menu_logout">登出</string>
 
 </resources>

@@ -10,6 +10,7 @@
         android:layout_margin="16dp"
         app:cardCornerRadius="4dp"
         app:cardElevation="2dp"
+        app:cardBackgroundColor="?attr/gradeCardBgColor"
         app:contentPadding="12dp">
 
         <LinearLayout
@@ -21,7 +22,7 @@
                 android:id="@+id/grade_semester_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/colorPrimary"
+                android:textColor="?attr/gradeItemTextColor"
                 android:gravity="center"
                 android:textSize="20sp" />
 
@@ -32,6 +33,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:visibility="gone"
+                android:textColor="?attr/gradeItemTextColor"
                 android:textSize="16sp" />
 
             <android.support.v4.widget.SwipeRefreshLayout

@@ -1,6 +1,7 @@
 package com.andreamapp.cqu.utils;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.andreamapp.cqu.App;
 import com.andreamapp.cqu.bean.Exams;
@@ -16,6 +17,7 @@ import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -45,14 +47,14 @@ import okhttp3.Response;
 
 public class API {
 
-    public static final String HOST = "https://39.107.228.154";
-    public static final String URL_LOGIN = "/api/login";
-    public static final String URL_GET_TABLE = "/api/getTable";
-    public static final String URL_GET_GRADE = "/api/getGrade";
-    public static final String URL_GET_EXAMS = "/api/getExams";
+    private static final String HOST = "https://39.107.228.154";
+    private static final String URL_LOGIN = "/api/login";
+    private static final String URL_GET_TABLE = "/api/getTable";
+    private static final String URL_GET_GRADE = "/api/getGrade";
+    private static final String URL_GET_EXAMS = "/api/getExams";
 
 
-    public static OkHttpClient.Builder trustAll() {
+    private static OkHttpClient.Builder trustAll() {
         // Create a trust manager that does not validate certificate chains
         final TrustManager[] trustAllCerts = new TrustManager[]{
                 new X509TrustManager() {
@@ -94,7 +96,7 @@ public class API {
                 });
     }
 
-    public static OkHttpClient withCookie(Context context) {
+    private static OkHttpClient withCookie(Context context) {
         CookieJar cookieJar =  new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
 
         OkHttpClient client = trustAll()
@@ -106,7 +108,7 @@ public class API {
         return client;
     }
 
-    public static OkHttpClient withSaveOnlyCookie(Context context) {
+    private static OkHttpClient withSaveOnlyCookie(Context context) {
         CookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context)){
             @Override
             public synchronized List<Cookie> loadForRequest(HttpUrl url) {
@@ -138,6 +140,31 @@ public class API {
             }
         }
         return res;
+    }
+
+    @Nullable
+    public static User currentUser(Context context) {
+        String json = App.context().getSharedPreferences("cache", Context.MODE_PRIVATE)
+                .getString("user_profile", "");
+        User user = null;
+        try {
+            user = new Gson().fromJson(json, User.class);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    public static void logout(Context context) {
+        // clear cookie
+        SharedPrefsCookiePersistor persistor = new SharedPrefsCookiePersistor(context);
+        persistor.clear();
+
+        // clear cache
+        App.context().getSharedPreferences("cache", Context.MODE_PRIVATE)
+                .edit()
+                .putString("user_profile", "")
+                .apply();
     }
 
     public static User login(String stunum, String password) throws ANError {

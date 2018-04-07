@@ -2,11 +2,14 @@ package com.andreamapp.cqu.login;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
 import android.os.AsyncTask;
 
+import com.andreamapp.cqu.App;
 import com.andreamapp.cqu.bean.User;
 import com.andreamapp.cqu.utils.API;
 import com.androidnetworking.error.ANError;
+import com.google.gson.Gson;
 
 /**
  * Created by Andream on 2018/3/24.
@@ -38,6 +41,11 @@ public class UserRepository {
             User user = new User();
             try {
                 user = API.login(args[0], args[1]);
+                // save user profile info
+                App.context().getSharedPreferences("cache", Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("user_profile", new Gson().toJson(user))
+                        .apply();
             } catch (ANError e) {
                 e.printStackTrace();
                 user.status = false;
