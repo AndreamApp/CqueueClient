@@ -42,5 +42,10 @@
     <string name="menu_grade">成绩</string>
     <string name="menu_reload_table">重新导入课表</string>
     <string name="menu_logout">登出</string>
+    <string name="menu_theme">主题</string>
+    <string name="menu_about">关于</string>
+    <string name="label_grade">成绩</string>
+    <string name="label_exams">考试</string>
+    <string name="label_about">关于</string>
 
 </resources>

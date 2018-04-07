@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.andreamapp.cqu.R;
+import com.andreamapp.cqu.about.AboutActivity;
 import com.andreamapp.cqu.base.BaseModelActivity;
 import com.andreamapp.cqu.exams.ExamsActivity;
 import com.andreamapp.cqu.grade.GradeActivity;
@@ -41,8 +42,10 @@ import java.util.Set;
 // TODO: Add semester selector
 public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         implements TableView.OnCourseClickListener,
+        Toolbar.OnMenuItemClickListener,
         ConfirmReloadTableDialogFragment.Listener,
-        ProfileDialogFragment.Listener {
+        ProfileDialogFragment.Listener,
+        ThemeSelectorDialogFragment.Listener {
 
     Toolbar mToolBar;                   // App top bar, show current week and menu
     ViewPager mViewPager;               // Table pager, every page show a week's courses
@@ -74,28 +77,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
 
         // setup tool bar and menu
         setSupportActionBar(mToolBar);
-        mToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_exams:
-                        startActivity(new Intent(TableFragment.this, ExamsActivity.class));
-                        break;
-                    case R.id.action_grade:
-                        startActivity(new Intent(TableFragment.this, GradeActivity.class));
-                        break;
-                    case R.id.action_refresh_table:
-                        ConfirmReloadTableDialogFragment.newInstance()
-                                .show(getSupportFragmentManager(), "ConfirmReload");
-                        break;
-                    case R.id.action_logout:
-                        ProfileDialogFragment.newInstance(API.currentUser(TableFragment.this))
-                                .show(getSupportFragmentManager(), "Profile");
-                        break;
-                }
-                return true;
-            }
-        });
+        mToolBar.setOnMenuItemClickListener(this);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -203,6 +185,34 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
     }
 
     @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_exams:
+                startActivity(new Intent(this, ExamsActivity.class));
+                break;
+            case R.id.action_grade:
+                startActivity(new Intent(this, GradeActivity.class));
+                break;
+            case R.id.action_theme:
+                ThemeSelectorDialogFragment.newInstance()
+                        .show(getSupportFragmentManager(), "ThemeSelector");
+                break;
+            case R.id.action_refresh_table:
+                ConfirmReloadTableDialogFragment.newInstance()
+                        .show(getSupportFragmentManager(), "ConfirmReload");
+                break;
+            case R.id.action_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                break;
+            case R.id.action_logout:
+                ProfileDialogFragment.newInstance(API.currentUser(this))
+                        .show(getSupportFragmentManager(), "Profile");
+                break;
+        }
+        return true;
+    }
+
+    @Override
     public void onCourseClicked(CourseIndex index) {
         CourseDetailDialogFragment.newInstance(index).show(getSupportFragmentManager(), "CourseDetail");
     }
@@ -227,6 +237,14 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         } else {
             Snackbar.make(mToolBar, "登出失败", Snackbar.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onThemeChanged(String theme) {
+        // restart to perform theme change
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     class WeekPagerAdapter extends FragmentPagerAdapter {

@@ -111,8 +111,9 @@
         <item name="colorControlHighlight">#dddddddd</item>
 
         <item name="android:windowBackground">@drawable/window_bg_translucent</item>
-        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowShowWallpaper">true</item>
+        <!--<item name="android:windowAnimationStyle">@style/activity_anim_fade</item>-->
     </style>
 
     <style name="TableHeaderTextView">

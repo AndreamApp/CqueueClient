@@ -26,11 +26,14 @@
         </activity>
         <activity android:name=".table.TableFragment" />
         <activity
-            android:label="成绩"
+            android:label="@string/label_grade"
             android:name=".grade.GradeActivity" />
         <activity
-            android:label="考试"
+            android:label="@string/label_exams"
             android:name=".exams.ExamsActivity" />
+        <activity
+            android:label="@string/label_about"
+            android:name=".about.AboutActivity" />
     </application>
 
 </manifest>

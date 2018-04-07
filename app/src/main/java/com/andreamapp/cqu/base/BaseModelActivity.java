@@ -2,9 +2,11 @@ package com.andreamapp.cqu.base;
 
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -74,6 +76,30 @@ public class BaseModelActivity<T extends Resp> extends AppCompatActivity
         }
     }
 
+    public @StyleRes
+    int getThemeRes() {
+        String themeSetting = getSharedPreferences("settings", MODE_PRIVATE)
+                .getString("theme", "Transparent");
+        int res = R.style.AppThemeTransparent;
+        if ("Transparent".equals(themeSetting)) {
+            res = R.style.AppThemeTransparent;
+        } else if ("Black".equals(themeSetting)) {
+            res = R.style.AppThemeBlack;
+        } else if ("Blue".equals(themeSetting)) {
+            res = R.style.AppThemeBlue;
+        } else if ("Pink".equals(themeSetting)) {
+            res = R.style.AppThemePink;
+        }
+        return res;
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+        Resources.Theme theme = super.getTheme();
+        theme.applyStyle(getThemeRes(), true);
+        return theme;
+    }
+
     /**
      * Triggered if login status expired
      *
@@ -137,5 +163,25 @@ public class BaseModelActivity<T extends Resp> extends AppCompatActivity
 
     protected boolean hideState() {
         return showState(false, 0, null);
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        if (R.style.AppThemeTransparent == getThemeRes()) {
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+        } else {
+            overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_half_out);
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (R.style.AppThemeTransparent == getThemeRes()) {
+            overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+        } else {
+            overridePendingTransition(R.anim.slide_left_half_in, R.anim.slide_right_out);
+        }
     }
 }
