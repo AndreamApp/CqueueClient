@@ -46,6 +46,18 @@
     <string name="menu_about">关于</string>
     <string name="label_grade">成绩</string>
     <string name="label_exams">考试</string>
-    <string name="label_about">关于</string>
+    <string name="label_about">关于Cqueue</string>
+
+    <string name="about_header_support">支持一下</string>
+    <string name="about_item_like">喜欢</string>
+    <string name="about_item_donate">捐赠</string>
+    <string name="about_header_contact">联系我们</string>
+    <string name="about_item_trello">开发计划</string>
+    <string name="about_item_qq_group">反馈交流群</string>
+    <string name="about_item_mail">邮箱</string>
+    <string name="about_item_github">Github主页</string>
+    <string name="about_header_os_license">开源许可协议</string>
+    <string name="about_des_donate">使用支付宝捐赠</string>
+    <string name="about_snack_no_alipay">还没安装支付宝哦</string>
 
 </resources>
