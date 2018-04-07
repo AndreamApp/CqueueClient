@@ -19,6 +19,9 @@ import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersisto
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
@@ -49,6 +52,7 @@ public class API {
 
     private static final String HOST = "https://39.107.228.154";
     private static final String URL_LOGIN = "/api/login";
+    private static final String URL_LOGOUT = "/api/logout";
     private static final String URL_GET_TABLE = "/api/getTable";
     private static final String URL_GET_GRADE = "/api/getGrade";
     private static final String URL_GET_EXAMS = "/api/getExams";
@@ -155,7 +159,7 @@ public class API {
         return user;
     }
 
-    public static void logout(Context context) {
+    public static boolean logout(Context context) throws ANError {
         // clear cookie
         SharedPrefsCookiePersistor persistor = new SharedPrefsCookiePersistor(context);
         persistor.clear();
@@ -165,6 +169,26 @@ public class API {
                 .edit()
                 .putString("user_profile", "")
                 .apply();
+
+        ANRequest request = AndroidNetworking.get(HOST + URL_LOGOUT)
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(withCookie(App.context()))
+                .getResponseOnlyFromNetwork()
+                .build();
+
+        ANResponse<JSONObject> response = request.executeForJSONObject();
+
+        if (response.isSuccess()) {
+            JSONObject object = response.getResult();
+            try {
+                return object.getBoolean("status");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            throw response.getError();
+        }
     }
 
     public static User login(String stunum, String password) throws ANError {

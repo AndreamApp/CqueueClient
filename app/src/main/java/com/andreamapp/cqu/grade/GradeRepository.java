@@ -34,17 +34,21 @@ public class GradeRepository {
             Grade grade = new Grade();
             try {
                 grade = API.getGrade(fromNetwork[0]);
+                // maybe get error response from cache, recall from network
+                if (!fromNetwork[0] && !grade.status) {
+                    return doInBackground(Boolean.TRUE);
+                }
             } catch (ANError e) {
                 e.printStackTrace();
+                // maybe get error response from cache, recall from network
+                if (!fromNetwork[0]) {
+                    return doInBackground(Boolean.TRUE);
+                }
                 grade.status = false;
                 switch (e.getErrorCode()) {
                     case 0:
                         grade.err = "网络错误";
                         break;
-                    case 504:
-                        if (!fromNetwork[0]) {
-                            return doInBackground(Boolean.TRUE);
-                        }
                     default:
                         grade.err = e.getErrorCode() + ": " + e.getErrorDetail();
                 }

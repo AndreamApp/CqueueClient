@@ -1,6 +1,7 @@
 package com.andreamapp.cqu.base;
 
 import android.arch.lifecycle.Observer;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.bean.Resp;
+import com.andreamapp.cqu.login.LoginActivity;
+import com.andreamapp.cqu.table.LogoutTask;
 
 /**
  * Created by Andream on 2018/3/31.
@@ -19,7 +22,9 @@ import com.andreamapp.cqu.bean.Resp;
  * Website: http://andreamapp.com
  */
 
-public class BaseModelActivity<T extends Resp> extends AppCompatActivity implements Observer<T> {
+public class BaseModelActivity<T extends Resp> extends AppCompatActivity
+        implements Observer<T>,
+        LogoutTask.Callback {
 
     @ColorInt
     int primiryColor;
@@ -62,7 +67,23 @@ public class BaseModelActivity<T extends Resp> extends AppCompatActivity impleme
             String err = t.err();
             if (err != null) {
                 Snackbar.make(getWindow().getDecorView(), err, Snackbar.LENGTH_SHORT).show();
+                if (err.equals("登录身份已过期")) {
+                    new LogoutTask(this).execute();
+                }
             }
+        }
+    }
+
+    /**
+     * Triggered if login status expired
+     *
+     * @param res result of logout, true in most case
+     */
+    @Override
+    public void onLogout(boolean res) {
+        if (res) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
         }
     }
 

@@ -35,18 +35,21 @@ public class ExamsRepository {
             Exams exams = new Exams();
             try {
                 exams = API.getExams(fromNetwork[0]);
+                // maybe get error response from cache, recall from network
+                if (!fromNetwork[0] && !exams.status) {
+                    return doInBackground(Boolean.TRUE);
+                }
             } catch (ANError e) {
                 e.printStackTrace();
+                // maybe get error response from cache, recall from network
+                if (!fromNetwork[0]) {
+                    return doInBackground(Boolean.TRUE);
+                }
                 exams.status = false;
                 switch (e.getErrorCode()) {
                     case 0:
                         exams.err = "网络错误";
                         break;
-                    case 504:
-                        // No cache error, fetch it from network
-                        if (!fromNetwork[0]) {
-                            return doInBackground(Boolean.TRUE);
-                        }
                     default:
                         exams.err = e.getErrorCode() + ": " + e.getErrorDetail();
                 }

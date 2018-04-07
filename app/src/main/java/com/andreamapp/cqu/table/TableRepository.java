@@ -86,19 +86,23 @@ public class TableRepository {
             CourseIndexWrapper indexes = new CourseIndexWrapper();
             try {
                 Table table = API.getTable(fromNetwork[0]);
+                // maybe get error response from cache, recall from network
+                if (!fromNetwork[0] && !table.status) {
+                    return doInBackground(Boolean.TRUE);
+                }
                 indexes = CourseIndex.generate(table);
             } catch (ANError e) {
                 e.printStackTrace();
+                // maybe get error response from cache, recall from network
+                if (!fromNetwork[0]) {
+                    return doInBackground(Boolean.TRUE);
+                }
                 indexes.source = new Table();
                 indexes.source.status = false;
                 switch (e.getErrorCode()) {
                     case 0:
                         indexes.source.err = "网络错误";
                         break;
-                    case 504:
-                        if (!fromNetwork[0]) {
-                            return doInBackground(Boolean.TRUE);
-                        }
                     default:
                         indexes.source.err = e.getErrorCode() + ": " + e.getErrorDetail();
                 }

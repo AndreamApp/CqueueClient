@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -213,9 +214,19 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
 
     @Override
     public void onUserLogout() {
-        API.logout(this);
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
+        mRefresh.setRefreshing(true);
+        new LogoutTask(this).execute();
+    }
+
+    @Override
+    public void onLogout(boolean res) {
+        mRefresh.setRefreshing(false);
+        if (res) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        } else {
+            Snackbar.make(mToolBar, "登出失败", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     class WeekPagerAdapter extends FragmentPagerAdapter {
@@ -320,6 +331,5 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
             }
         }
     }
-
 
 }
