@@ -57,6 +57,4 @@ dependencies {
     //    annotationProcessor "com.google.dagger:dagger-compiler:2.4"
     // Fast Android Networking
     implementation 'com.amitshekhar.android:android-networking:1.0.1'
-
-    implementation 'com.github.didikee:AndroidDonate:0.1.0'
 }

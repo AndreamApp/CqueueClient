@@ -101,7 +101,7 @@ public class LoginActivity extends BaseModelActivity<User> {
         super.onChanged(user);
         isLogining = false;
         if (user != null) {
-            if (user.status()) {
+            if (user.status) {
                 startActivity(new Intent(LoginActivity.this, TableFragment.class));
                 finish();
             } else {

@@ -66,7 +66,7 @@ public class GradeActivity extends BaseModelActivity<Grade> {
                     fragment.mRefresh.setRefreshing(false);
                 }
 
-                if (grade != null && grade.status()) {
+                if (grade != null && grade.status) {
                     mPagerAdapter.setGrade(grade);
                     mPagerAdapter.notifyDataSetChanged();
 

@@ -26,7 +26,7 @@ public class CourseIndexTest {
         assertEquals("com.andreamapp.cqu", appContext.getPackageName());
 
         User user = API.login("20151597", "976655");
-        Table table = API.getTable();
+        Table table = API.getTable(true);
         for (int i = 0; i < 100; i++) {
             long start = System.currentTimeMillis();
             CourseIndexWrapper res = CourseIndex.generate(table);

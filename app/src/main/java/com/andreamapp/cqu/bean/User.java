@@ -1,34 +1,15 @@
 package com.andreamapp.cqu.bean;
 
-import android.support.annotation.Nullable;
-
 /**
  * Created by Andream on 2018/2/27.
  * Website: http://andream.com.cn
  * Email: me@andream.com.cn
  */
 
-public class User implements Resp {
-    public boolean status;
-    public String msg;
-    public String err;
-
-    @Override
-    public boolean status() {
-        return status;
-    }
-
-    @Nullable
-    @Override
-    public String err() {
-        return err;
-    }
-
-    @Nullable
-    @Override
-    public String msg() {
-        return msg;
-    }
+public class User extends Resp {
+//    public boolean status;
+//    public String msg;
+//    public String err;
 
     public UserData data;
 

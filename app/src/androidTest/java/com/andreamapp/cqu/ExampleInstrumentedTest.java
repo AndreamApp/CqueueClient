@@ -33,9 +33,9 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void test() throws Exception {
-        User user = API.login("20151597", "976655");
-        Table table = API.getTable();
-        Grade grade = API.getGrade();
-        Exams exams = API.getExams();
+        User user = API.login("20151597", "237231");
+        Table table = API.getTable(true);
+        Grade grade = API.getGrade(true);
+        Exams exams = API.getExams(true);
     }
 }

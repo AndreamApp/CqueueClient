@@ -149,7 +149,8 @@ public class TableView extends RelativeLayout {
         }
 
         public void emptySection(int sections) {
-            setHeight(sections * getResources().getDimensionPixelSize(R.dimen.table_item_height));
+            setHeight(sections * getResources().getDimensionPixelSize(R.dimen.table_item_height)
+                    + (sections - 1) * getResources().getDimensionPixelSize(R.dimen.table_item_margin));
             setBackgroundResource(R.drawable.table_item_empty_bg);
         }
 

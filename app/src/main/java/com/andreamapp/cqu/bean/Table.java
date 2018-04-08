@@ -1,7 +1,5 @@
 package com.andreamapp.cqu.bean;
 
-import android.support.annotation.Nullable;
-
 import java.util.List;
 
 /**
@@ -10,29 +8,12 @@ import java.util.List;
  * Email: me@andream.com.cn
  */
 
-public class Table implements Resp {
-    public boolean status;
-    public String msg;
-    public String err;
+public class Table extends Resp {
+    //    public boolean status;
+//    public String msg;
+//    public String err;
     public List<Course> data;
 
-    @Override
-    public boolean status() {
-        return status;
-    }
-
-    @Nullable
-    @Override
-    public String err() {
-        return err;
-    }
-
-    @Nullable
-    @Override
-    public String msg() {
-        return msg;
-    }
-    
     /*
     eg.
         {

@@ -96,7 +96,7 @@ public class ExamsActivity extends BaseModelActivity<Exams> {
         super.onChanged(exams);
 
         mRefresh.setRefreshing(false);
-        if (exams != null && exams.status()) {
+        if (exams != null && exams.status) {
             mAdapter.setExams(exams);
             mAdapter.notifyDataSetChanged();
 

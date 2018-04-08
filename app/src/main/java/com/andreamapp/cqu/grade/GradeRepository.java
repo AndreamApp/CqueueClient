@@ -2,8 +2,8 @@ package com.andreamapp.cqu.grade;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
 
+import com.andreamapp.cqu.base.BaseRespTask;
 import com.andreamapp.cqu.bean.Grade;
 import com.andreamapp.cqu.utils.API;
 import com.androidnetworking.error.ANError;
@@ -22,43 +22,30 @@ public class GradeRepository {
         return data;
     }
 
-    public static class GradeTask extends AsyncTask<Boolean, Void, Grade> {
-        MutableLiveData<Grade> res;
-
+    public static class GradeTask extends BaseRespTask<Boolean, Grade> {
         GradeTask(MutableLiveData<Grade> res) {
-            this.res = res;
+            super(res);
         }
 
         @Override
-        protected Grade doInBackground(Boolean... fromNetwork) {
-            Grade grade = new Grade();
-            try {
-                grade = API.getGrade(fromNetwork[0]);
-                // maybe get error response from cache, recall from network
-                if (!fromNetwork[0] && !grade.status) {
-                    return doInBackground(Boolean.TRUE);
-                }
-            } catch (ANError e) {
-                e.printStackTrace();
-                // maybe get error response from cache, recall from network
-                if (!fromNetwork[0]) {
-                    return doInBackground(Boolean.TRUE);
-                }
-                grade.status = false;
-                switch (e.getErrorCode()) {
-                    case 0:
-                        grade.err = "网络错误";
-                        break;
-                    default:
-                        grade.err = e.getErrorCode() + ": " + e.getErrorDetail();
-                }
-            }
-            return grade;
+        public Grade newInstance() {
+            return new Grade();
         }
 
         @Override
-        protected void onPostExecute(Grade grade) {
-            res.setValue(grade);
+        public Grade getResult(Boolean[] network) throws ANError {
+            return API.getGrade(network[0]);
+        }
+
+        @Override
+        public boolean fromNetwork(Boolean[] network) {
+            return network[0];
+        }
+
+        @Override
+        public Grade redo(Boolean[] network) {
+            network[0] = true;
+            return super.redo(network);
         }
     }
 }

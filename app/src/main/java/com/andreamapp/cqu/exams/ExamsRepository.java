@@ -2,8 +2,8 @@ package com.andreamapp.cqu.exams;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
 
+import com.andreamapp.cqu.base.BaseRespTask;
 import com.andreamapp.cqu.bean.Exams;
 import com.andreamapp.cqu.utils.API;
 import com.androidnetworking.error.ANError;
@@ -23,43 +23,30 @@ public class ExamsRepository {
     }
 
 
-    public static class ExamsTask extends AsyncTask<Boolean, Void, Exams> {
-        MutableLiveData<Exams> res;
-
+    public static class ExamsTask extends BaseRespTask<Boolean, Exams> {
         ExamsTask(MutableLiveData<Exams> res) {
-            this.res = res;
+            super(res);
         }
 
         @Override
-        protected Exams doInBackground(Boolean... fromNetwork) {
-            Exams exams = new Exams();
-            try {
-                exams = API.getExams(fromNetwork[0]);
-                // maybe get error response from cache, recall from network
-                if (!fromNetwork[0] && !exams.status) {
-                    return doInBackground(Boolean.TRUE);
-                }
-            } catch (ANError e) {
-                e.printStackTrace();
-                // maybe get error response from cache, recall from network
-                if (!fromNetwork[0]) {
-                    return doInBackground(Boolean.TRUE);
-                }
-                exams.status = false;
-                switch (e.getErrorCode()) {
-                    case 0:
-                        exams.err = "网络错误";
-                        break;
-                    default:
-                        exams.err = e.getErrorCode() + ": " + e.getErrorDetail();
-                }
-            }
-            return exams;
+        public Exams newInstance() {
+            return new Exams();
         }
 
         @Override
-        protected void onPostExecute(Exams exams) {
-            res.setValue(exams);
+        public Exams getResult(Boolean[] network) throws ANError {
+            return API.getExams(network[0]);
+        }
+
+        @Override
+        public boolean fromNetwork(Boolean[] network) {
+            return network[0];
+        }
+
+        @Override
+        public Exams redo(Boolean[] network) {
+            network[0] = true;
+            return super.redo(network);
         }
     }
 }

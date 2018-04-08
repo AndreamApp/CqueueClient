@@ -3,9 +3,9 @@ package com.andreamapp.cqu.login;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.andreamapp.cqu.App;
+import com.andreamapp.cqu.base.BaseRespTask;
 import com.andreamapp.cqu.bean.User;
 import com.andreamapp.cqu.utils.API;
 import com.androidnetworking.error.ANError;
@@ -29,40 +29,26 @@ public class UserRepository {
         return res;
     }
 
-    public static class LoginTask extends AsyncTask<String, Void, User> {
-        MutableLiveData<User> res;
-
+    public static class LoginTask extends BaseRespTask<String, User> {
         LoginTask(MutableLiveData<User> res) {
-            this.res = res;
+            super(res);
         }
 
         @Override
-        protected User doInBackground(String... args) {
-            User user = new User();
-            try {
-                user = API.login(args[0], args[1]);
-                // save user profile info
-                App.context().getSharedPreferences("cache", Context.MODE_PRIVATE)
-                        .edit()
-                        .putString("user_profile", new Gson().toJson(user))
-                        .apply();
-            } catch (ANError e) {
-                e.printStackTrace();
-                user.status = false;
-                switch (e.getErrorCode()) {
-                    case 0:
-                        user.err = "网络错误";
-                        break;
-                    default:
-                        user.err = e.getErrorCode() + ": " + e.getErrorDetail();
-                }
-            }
+        public User newInstance() {
+            return new User();
+        }
+
+        @Override
+        public User getResult(String[] args) throws ANError {
+            User user = API.login(args[0], args[1]);
+            // save user profile info
+            App.context().getSharedPreferences("cache", Context.MODE_PRIVATE)
+                    .edit()
+                    .putString("user_profile", new Gson().toJson(user))
+                    .apply();
             return user;
         }
-
-        @Override
-        protected void onPostExecute(User user) {
-            res.setValue(user);
-        }
     }
+
 }

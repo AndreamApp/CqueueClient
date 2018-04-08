@@ -96,6 +96,9 @@ public class CourseIndex implements Comparable<CourseIndex> {
 
         CourseIndexWrapper wrapper = new CourseIndexWrapper();
         wrapper.source = table;
+        wrapper.status = table.status;
+        wrapper.msg = table.msg;
+        wrapper.err = table.err;
         wrapper.indexes = res;
         return wrapper;
     }

@@ -60,13 +60,13 @@ public class BaseModelActivity<T extends Resp> extends AppCompatActivity
         if (t == null) {
             return;
         }
-        if (t.status()) {
-            String msg = t.msg();
+        if (t.status) {
+            String msg = t.msg;
             if (msg != null) {
                 Snackbar.make(getWindow().getDecorView(), msg, Snackbar.LENGTH_SHORT).show();
             }
         } else {
-            String err = t.err();
+            String err = t.err;
             if (err != null) {
                 Snackbar.make(getWindow().getDecorView(), err, Snackbar.LENGTH_SHORT).show();
                 if (err.equals("登录身份已过期")) {

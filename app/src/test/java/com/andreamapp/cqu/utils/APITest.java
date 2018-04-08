@@ -15,7 +15,7 @@ import org.junit.Test;
 public class APITest {
     @Test
     public void login() throws Exception {
-        User user = API.login("20151597", "976655");
+        User user = API.login("20151597", "237231");
         Table table = API.getTable(true);
         Grade grade = API.getGrade(true);
         Exams exams = API.getExams(true);

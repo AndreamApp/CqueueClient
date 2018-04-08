@@ -9,23 +9,26 @@ import android.support.annotation.Nullable;
  * Website: http://andreamapp.com
  */
 
-public interface Resp {
+public class Resp {
+
+    public Resp() {
+    }
 
     /**
      * @return the status of network response
      */
     @NonNull
-    boolean status();
+    public boolean status;
 
     /**
      * @return the error information of network, usually need it when status is false
      */
     @Nullable
-    String err();
+    public String err;
 
     /**
      * @return the toast information of network, usually need it when status is true
      */
     @Nullable
-    String msg();
+    public String msg;
 }

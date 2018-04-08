@@ -2,7 +2,6 @@ package com.andreamapp.cqu.about;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.didikee.donate.AlipayDonate;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.base.BaseModelActivity;
+import com.andreamapp.cqu.utils.Alipay;
 
 /**
  * Created by Andream on 2018/4/7.
@@ -30,15 +30,13 @@ public class AboutActivity extends BaseModelActivity {
     public static final String TRELLO = "https://trello.com/b/rT2nOVtT/cqueue";
     public static final String QQ_GROUP = "744097714";
     public static final String MAIL = "andreamapp@qq.com";
-    public static final String GITHUB = "https://github.com/AndreamApp/TableClient";
+    public static final String GITHUB = "https://github.com/AndreamApp/CqueueClient";
 
     public static final License[] LICENSES = new License[]{
             new License("Fast Android Networking - Amit Shekhar",
                     "https://github.com/amitshekhariitbhu/Fast-Android-Networking", License.APACHE),
             new License("PersistentCookieJar - Francisco José Montiel Navarro",
                     "https://github.com/franmontiel/PersistentCookieJar", License.APACHE),
-            new License("AndroidDonate - didikee",
-                    "https://github.com/didikee/AndroidDonate", License.MIT),
             new License("gson - Google",
                     "https://github.com/google/gson", License.APACHE),
             new License("android support libraries - Google",
@@ -136,9 +134,8 @@ public class AboutActivity extends BaseModelActivity {
     }
 
     private void donateAlipay(String payCode) {
-        boolean hasInstalledAlipayClient = AlipayDonate.hasInstalledAlipayClient(this);
-        if (hasInstalledAlipayClient) {
-            AlipayDonate.startAlipayClient(this, payCode);
+        if (Alipay.hasInstalled(this)) {
+            Alipay.start(this, payCode);
         } else {
             Snackbar.make(getWindow().getDecorView(), R.string.about_snack_no_alipay, Snackbar.LENGTH_SHORT).show();
         }

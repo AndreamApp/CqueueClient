@@ -2,9 +2,8 @@ package com.andreamapp.cqu.table;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
-import android.util.Log;
 
+import com.andreamapp.cqu.base.BaseRespTask;
 import com.andreamapp.cqu.bean.Table;
 import com.andreamapp.cqu.utils.API;
 import com.androidnetworking.error.ANError;
@@ -42,77 +41,51 @@ public class TableRepository {
     /**
      * 获取课表的异步任务
      */
-    public static class FetchTableTask extends AsyncTask<Void, Void, Table> {
-        MutableLiveData<Table> liveData;
 
-        public FetchTableTask(MutableLiveData<Table> table) {
-            this.liveData = table;
+    public static class FetchTableTask extends BaseRespTask<Void, Table> {
+        FetchTableTask(MutableLiveData<Table> res) {
+            super(res);
         }
 
         @Override
-        protected Table doInBackground(Void... voids) {
-            Table table = new Table();
-            try {
-                long start = System.currentTimeMillis();
-                table = API.getTable(true);
-                long end = System.currentTimeMillis();
-                Log.i("HTTPTest", "" + (end - start) + "ms");
-            } catch (ANError e) {
-                e.printStackTrace();
-                table.status = false;
-                table.err = e.getErrorCode() + ": " + e.getErrorBody(); //"网络错误";
-            }
-            return table;
+        public Table newInstance() {
+            return new Table();
         }
 
         @Override
-        protected void onPostExecute(Table table) {
-            this.liveData.setValue(table);
+        public Table getResult(Void[] args) throws ANError {
+            return API.getTable(true);
         }
     }
 
-    /**
-     * 获取课表的异步任务
-     */
-    public static class CourseIndexTask extends AsyncTask<Boolean, Void, CourseIndexWrapper> {
-        MutableLiveData<CourseIndexWrapper> liveData;
 
-        public CourseIndexTask(MutableLiveData<CourseIndexWrapper> table) {
-            this.liveData = table;
+    public static class CourseIndexTask extends BaseRespTask<Boolean, CourseIndexWrapper> {
+        CourseIndexTask(MutableLiveData<CourseIndexWrapper> res) {
+            super(res);
         }
 
         @Override
-        protected CourseIndexWrapper doInBackground(Boolean... fromNetwork) {
-            CourseIndexWrapper indexes = new CourseIndexWrapper();
-            try {
-                Table table = API.getTable(fromNetwork[0]);
-                // maybe get error response from cache, recall from network
-                if (!fromNetwork[0] && !table.status) {
-                    return doInBackground(Boolean.TRUE);
-                }
-                indexes = CourseIndex.generate(table);
-            } catch (ANError e) {
-                e.printStackTrace();
-                // maybe get error response from cache, recall from network
-                if (!fromNetwork[0]) {
-                    return doInBackground(Boolean.TRUE);
-                }
-                indexes.source = new Table();
-                indexes.source.status = false;
-                switch (e.getErrorCode()) {
-                    case 0:
-                        indexes.source.err = "网络错误";
-                        break;
-                    default:
-                        indexes.source.err = e.getErrorCode() + ": " + e.getErrorDetail();
-                }
-            }
-            return indexes;
+        public CourseIndexWrapper newInstance() {
+            CourseIndexWrapper wrapper = new CourseIndexWrapper();
+            wrapper.source = new Table();
+            return wrapper;
         }
 
         @Override
-        protected void onPostExecute(CourseIndexWrapper indexes) {
-            this.liveData.setValue(indexes);
+        public CourseIndexWrapper getResult(Boolean[] network) throws ANError {
+            Table table = API.getTable(network[0]);
+            return CourseIndex.generate(table);
+        }
+
+        @Override
+        public boolean fromNetwork(Boolean[] network) {
+            return network[0];
+        }
+
+        @Override
+        public CourseIndexWrapper redo(Boolean[] network) {
+            network[0] = true;
+            return super.redo(network);
         }
     }
 }

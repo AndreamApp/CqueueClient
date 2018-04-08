@@ -112,7 +112,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         super.onChanged(wrapper);
 
         mRefresh.setRefreshing(false);
-        if (wrapper != null && wrapper.status()) {
+        if (wrapper != null && wrapper.status) {
             mAdapter.wrapper = wrapper;
             mAdapter.notifyDataSetChanged();
             Calendar c = Calendar.getInstance();
