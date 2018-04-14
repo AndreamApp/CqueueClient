@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/toolBarColor"
-        app:titleTextColor="?attr/foreTextColor"
+        app:titleTextColor="?attr/titleTextColor"
         app:title="@string/label_about" />
 
     <ScrollView

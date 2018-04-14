@@ -5,8 +5,11 @@ import android.support.annotation.Nullable;
 
 import com.andreamapp.cqu.App;
 import com.andreamapp.cqu.bean.Exams;
+import com.andreamapp.cqu.bean.Feedbacks;
 import com.andreamapp.cqu.bean.Grade;
+import com.andreamapp.cqu.bean.Resp;
 import com.andreamapp.cqu.bean.Table;
+import com.andreamapp.cqu.bean.Update;
 import com.andreamapp.cqu.bean.User;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
@@ -50,12 +53,16 @@ import okhttp3.Response;
 
 public class API {
 
-    private static final String HOST = "https://39.107.228.154";
-    private static final String URL_LOGIN = "/api/login";
-    private static final String URL_LOGOUT = "/api/logout";
-    private static final String URL_GET_TABLE = "/api/getTable";
-    private static final String URL_GET_GRADE = "/api/getGrade";
-    private static final String URL_GET_EXAMS = "/api/getExams";
+    private static final String HOST = "https://cqu.andreamapp.com";
+    private static final String URL_LOGIN = "/api/v1/login";
+    private static final String URL_LOGOUT = "/api/v1/logout";
+    private static final String URL_GET_TABLE = "/api/v1/getTable";
+    private static final String URL_GET_GRADE = "/api/v1/getGrade";
+    private static final String URL_GET_EXAMS = "/api/v1/getExams";
+    private static final String URL_LIKE = "/api/v1/like";
+    private static final String URL_UPLOAD_FEEDBACK = "/api/v1/uploadFeedback";
+    private static final String URL_GET_FEEDBACKS = "/api/v1/getFeedbacks";
+    private static final String URL_CHECK_UPDATE = "/api/v1/checkUpdate";
 
 
     private static OkHttpClient.Builder trustAll() {
@@ -262,6 +269,68 @@ public class API {
 
         ANRequest request = builder.build();
         ANResponse<Exams> response = request.executeForObject(Exams.class);
+
+        if (response.isSuccess()) {
+            return response.getResult();
+        } else {
+            throw response.getError();
+        }
+    }
+
+    public static Resp like() throws ANError {
+        ANRequest.GetRequestBuilder builder = AndroidNetworking.get(HOST + URL_LIKE)
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(withCookie(App.context()));
+
+        ANRequest request = builder.build();
+        ANResponse<Resp> response = request.executeForObject(Resp.class);
+
+        if (response.isSuccess()) {
+            return response.getResult();
+        } else {
+            throw response.getError();
+        }
+    }
+
+    public static Resp uploadFeedback(String message, String stackTrack) throws ANError {
+        ANRequest.PostRequestBuilder builder = AndroidNetworking.post(HOST + URL_UPLOAD_FEEDBACK)
+                .addBodyParameter("message", message)
+                .addBodyParameter("stackTrack", stackTrack)
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(withCookie(App.context()));
+
+        ANRequest request = builder.build();
+        ANResponse<Resp> response = request.executeForObject(Resp.class);
+
+        if (response.isSuccess()) {
+            return response.getResult();
+        } else {
+            throw response.getError();
+        }
+    }
+
+    public static Feedbacks getFeedbacks() throws ANError {
+        ANRequest.GetRequestBuilder builder = AndroidNetworking.get(HOST + URL_GET_FEEDBACKS)
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(withCookie(App.context()));
+
+        ANRequest request = builder.build();
+        ANResponse<Feedbacks> response = request.executeForObject(Feedbacks.class);
+
+        if (response.isSuccess()) {
+            return response.getResult();
+        } else {
+            throw response.getError();
+        }
+    }
+
+    public static Update checkUpdate() throws ANError {
+        ANRequest.GetRequestBuilder builder = AndroidNetworking.get(HOST + URL_CHECK_UPDATE)
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(withCookie(App.context()));
+
+        ANRequest request = builder.build();
+        ANResponse<Update> response = request.executeForObject(Update.class);
 
         if (response.isSuccess()) {
             return response.getResult();

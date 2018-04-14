@@ -4,8 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="12dp"
-    android:paddingEnd="12dp"
+    android:paddingEnd="0dp"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    android:textColor="?attr/hintTextColor"
+    android:background="?attr/colorPrimary"
+    android:alpha="0.8"
+    android:textStyle="bold"
+    android:textColor="?attr/titleTextColor"
     android:textSize="12sp" />

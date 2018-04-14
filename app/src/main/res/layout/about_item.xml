@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:padding="8dp"
+    android:paddingStart="6dp"
+    android:paddingEnd="6dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:focusable="true"
     android:clickable="true"
     android:background="?selectableItemBackground"
@@ -25,16 +28,18 @@
             android:id="@+id/about_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="6dp"
+            android:textColor="?attr/foreTextColor"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/about_item_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="6dp"
             android:layout_marginTop="8dp"
             android:visibility="gone"
+            android:textColor="?attr/foreTextColor"
             android:textSize="12sp" />
 
     </LinearLayout>

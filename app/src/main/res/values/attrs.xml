@@ -9,6 +9,7 @@
         <attr format="color" name="colorAccent" />
 
         <!-- General text color -->
+        <attr format="color" name="titleTextColor" />
         <attr format="color" name="foreTextColor" />
         <attr format="color" name="hintTextColor" />
 

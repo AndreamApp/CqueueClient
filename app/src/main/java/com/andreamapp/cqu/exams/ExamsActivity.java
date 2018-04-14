@@ -23,7 +23,6 @@ import com.andreamapp.cqu.bean.Exams;
  * Website: http://andreamapp.com
  */
 
-// TODO: Add empty view
 public class ExamsActivity extends BaseModelActivity<Exams> {
 
     Toolbar mToolBar;                   // App tool bar

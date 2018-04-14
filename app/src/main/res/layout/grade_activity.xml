@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:background="?attr/toolBarColor"
-        app:titleTextColor="?attr/foreTextColor" />
+        app:titleTextColor="?attr/titleTextColor" />
 
     <FrameLayout
         android:layout_width="match_parent"

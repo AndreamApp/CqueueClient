@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:background="?attr/toolBarColor"
-        app:titleTextColor="?attr/foreTextColor" />
+        app:titleTextColor="?attr/titleTextColor" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh"

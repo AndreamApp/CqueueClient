@@ -8,8 +8,9 @@
         <item name="colorPrimary">#ef9bae</item>
         <item name="colorAccent">#edb0be</item>
 
-        <item name="foreTextColor">#f8f8f8</item>
-        <item name="hintTextColor">#c0c0c0</item>
+        <item name="titleTextColor">#f8f8f8</item>
+        <item name="foreTextColor">#333333</item>
+        <item name="hintTextColor">#666666</item>
 
         <item name="tableHeaderTextColor">#808080</item>
         <item name="courseTextColor">#f0f0f0</item>
@@ -34,8 +35,9 @@
         <item name="colorPrimary">#1E73B4</item>
         <item name="colorAccent">#1E73B4</item>
 
-        <item name="foreTextColor">#f8f8f8</item>
-        <item name="hintTextColor">#c0c0c0</item>
+        <item name="titleTextColor">#f8f8f8</item>
+        <item name="foreTextColor">#333333</item>
+        <item name="hintTextColor">#666666</item>
 
         <item name="tableHeaderTextColor">#808080</item>
         <item name="courseTextColor">#f0f0f0</item>
@@ -60,6 +62,7 @@
         <item name="colorPrimary">#393939</item>
         <item name="colorAccent">#565656</item>
 
+        <item name="titleTextColor">#f8f8f8</item>
         <item name="foreTextColor">#f8f8f8</item>
         <item name="hintTextColor">#c0c0c0</item>
 
@@ -88,8 +91,9 @@
         <item name="colorPrimary">#70000000</item>
         <item name="colorAccent">#80000000</item>
 
+        <item name="titleTextColor">#c0f8f8f8</item>
         <item name="foreTextColor">#c0f8f8f8</item>
-        <item name="hintTextColor">#a0c0c0c0</item>
+        <item name="hintTextColor">#c0c0c0c0</item>
 
         <item name="tableHeaderTextColor">#cccccccc</item>
         <item name="courseTextColor">#a0eeeeee</item>

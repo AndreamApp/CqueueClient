@@ -1,7 +1,10 @@
 package com.andreamapp.cqu.about;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -15,7 +18,12 @@ import android.widget.TextView;
 
 import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.base.BaseModelActivity;
+import com.andreamapp.cqu.base.BaseRespTask;
+import com.andreamapp.cqu.bean.Resp;
+import com.andreamapp.cqu.bean.Update;
+import com.andreamapp.cqu.utils.API;
 import com.andreamapp.cqu.utils.Alipay;
+import com.androidnetworking.error.ANError;
 
 /**
  * Created by Andream on 2018/4/7.
@@ -52,8 +60,76 @@ public class AboutActivity extends BaseModelActivity {
 
         container = findViewById(R.id.about_container);
 
+        newItem().name(R.string.about_item_update)
+                .description("v0.0.1")
+                .click(new View.OnClickListener() {
+                    @SuppressLint("StaticFieldLeak")
+                    @Override
+                    public void onClick(final View v) {
+                        new BaseRespTask<Void, Update>(null) {
+                            @Override
+                            public Update newInstance() {
+                                return new Update();
+                            }
+
+                            @Override
+                            public Update getResult(Void[] voids) throws ANError {
+                                return API.checkUpdate();
+                            }
+
+                            @Override
+                            protected void onPostExecute(final Update update) {
+                                if (update.status && update.data != null) {
+                                    if (update.data.version_code > getVersionCode()) {
+                                        Snackbar.make(v, update.data.description, Snackbar.LENGTH_INDEFINITE)
+                                                .setAction(R.string.about_action_update, new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        openUrl(update.data.download_url);
+                                                    }
+                                                }).show();
+                                    } else {
+                                        Snackbar.make(v, R.string.about_no_update, Snackbar.LENGTH_SHORT)
+                                                .show();
+                                    }
+                                }
+
+                            }
+                        }.execute();
+                    }
+                }).add();
         newHeader().name(R.string.about_header_support).add();
-        newItem().name(R.string.about_item_like).add();
+        newItem().name(R.string.about_item_like)
+                .click(new View.OnClickListener() {
+                    @SuppressLint("StaticFieldLeak")
+                    @Override
+                    public void onClick(final View v) {
+                        new BaseRespTask<Void, Resp>(null) {
+                            @Override
+                            public Resp newInstance() {
+                                return new Resp();
+                            }
+
+                            @Override
+                            public Resp getResult(Void[] voids) throws ANError {
+                                return API.like();
+                            }
+
+                            @Override
+                            protected void onPostExecute(final Resp like) {
+                                if (like.status) {
+                                    if (like.msg != null) {
+                                        TextView des = v.findViewById(R.id.about_item_description);
+                                        des.setText(like.msg);
+                                        des.setVisibility(View.VISIBLE);
+//                                        Snackbar.make(v, like.msg, Snackbar.LENGTH_SHORT)
+//                                                .show();
+                                    }
+                                }
+                            }
+                        }.execute();
+                    }
+                }).add();
         newItem().name(R.string.about_item_donate).description(R.string.about_des_donate)
                 .click(new View.OnClickListener() {
                     @Override
@@ -130,6 +206,17 @@ public class AboutActivity extends BaseModelActivity {
         } catch (Exception e) {
             // 未安装手Q或安装的版本不支持
             return false;
+        }
+    }
+
+    public int getVersionCode() {
+        try {
+            PackageManager pm = getPackageManager();
+            PackageInfo info = pm.getPackageInfo(getPackageName(), 0);
+            return info.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 
