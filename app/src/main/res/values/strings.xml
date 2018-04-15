@@ -53,7 +53,8 @@
     <string name="about_item_donate">捐赠</string>
     <string name="about_header_contact">联系我们</string>
     <string name="about_item_trello">开发计划</string>
-    <string name="about_item_qq_group">反馈交流群</string>
+    <string name="about_item_feedback">一句话建议</string>
+    <string name="about_item_qq_group">QQ交流群</string>
     <string name="about_item_mail">邮箱</string>
     <string name="about_item_github">Github主页</string>
     <string name="about_header_os_license">开源许可协议</string>
@@ -62,5 +63,9 @@
     <string name="about_item_update">检查更新</string>
     <string name="about_no_update">当前已是最新版本</string>
     <string name="about_action_update">更新</string>
+    <string name="about_des_feedback">帮助我努力做得更好！</string>
+    <string name="about_dialog_title_feedback">建议</string>
+    <string name="about_dialog_post_feedback">提交</string>
+    <string name="feedback_snack_success">反馈成功</string>
 
 </resources>

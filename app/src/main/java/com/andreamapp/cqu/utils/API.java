@@ -22,6 +22,7 @@ import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersisto
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import org.acra.data.CrashReportData;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,6 +61,7 @@ public class API {
     private static final String URL_GET_GRADE = "/api/v1/getGrade";
     private static final String URL_GET_EXAMS = "/api/v1/getExams";
     private static final String URL_LIKE = "/api/v1/like";
+    private static final String URL_CRASH = "/api/v1/crash";
     private static final String URL_UPLOAD_FEEDBACK = "/api/v1/uploadFeedback";
     private static final String URL_GET_FEEDBACKS = "/api/v1/getFeedbacks";
     private static final String URL_CHECK_UPDATE = "/api/v1/checkUpdate";
@@ -292,10 +294,36 @@ public class API {
         }
     }
 
-    public static Resp uploadFeedback(String message, String stackTrack) throws ANError {
+    public static Resp crash(CrashReportData data) throws ANError {
+        String json = null;
+        try {
+            json = data.toJSON();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (json == null) {
+            return null;
+        }
+
+        ANRequest.PostRequestBuilder builder = AndroidNetworking.post(HOST + URL_CRASH)
+                .addStringBody(json)
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(withCookie(App.context()));
+
+        ANRequest request = builder.build();
+        ANResponse<Resp> response = request.executeForObject(Resp.class);
+
+        if (response.isSuccess()) {
+            return response.getResult();
+        } else {
+            throw response.getError();
+        }
+    }
+
+    public static Resp uploadFeedback(String message) throws ANError {
         ANRequest.PostRequestBuilder builder = AndroidNetworking.post(HOST + URL_UPLOAD_FEEDBACK)
                 .addBodyParameter("message", message)
-                .addBodyParameter("stackTrack", stackTrack)
                 .setPriority(Priority.LOW)
                 .setOkHttpClient(withCookie(App.context()));
 

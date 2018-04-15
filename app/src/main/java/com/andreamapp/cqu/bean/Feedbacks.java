@@ -13,7 +13,7 @@ public class Feedbacks extends Resp {
     public List<Feedback> data;
 
     public class Feedback {
+        public String stunum;
         public String message;
-        public String stackTrack;
     }
 }

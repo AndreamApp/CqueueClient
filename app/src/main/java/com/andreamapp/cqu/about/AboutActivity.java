@@ -1,7 +1,9 @@
 package com.andreamapp.cqu.about;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -11,7 +13,11 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,6 +51,8 @@ public class AboutActivity extends BaseModelActivity {
                     "https://github.com/amitshekhariitbhu/Fast-Android-Networking", License.APACHE),
             new License("PersistentCookieJar - Francisco José Montiel Navarro",
                     "https://github.com/franmontiel/PersistentCookieJar", License.APACHE),
+            new License("acra - ACRA",
+                    "https://github.com/ACRA/acra", License.APACHE),
             new License("gson - Google",
                     "https://github.com/google/gson", License.APACHE),
             new License("android support libraries - Google",
@@ -144,6 +152,13 @@ public class AboutActivity extends BaseModelActivity {
                     @Override
                     public void onClick(View v) {
                         openUrl(TRELLO);
+                    }
+                }).add();
+        newItem().name(R.string.about_item_feedback).description(R.string.about_des_feedback)
+                .click(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FeedbackDialog.newInstance().show(getSupportFragmentManager(), "Feedback");
                     }
                 }).add();
         newItem().name(R.string.about_item_qq_group).description(QQ_GROUP)
@@ -320,6 +335,56 @@ public class AboutActivity extends BaseModelActivity {
             this.name = name;
             this.url = url;
             this.lisence = lisence;
+        }
+    }
+
+    public static class FeedbackDialog extends AppCompatDialogFragment {
+
+        public static FeedbackDialog newInstance() {
+            return new FeedbackDialog();
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            View v = getActivity().getLayoutInflater()
+                    .inflate(R.layout.about_feedback_dialog, null);
+            EditText text = v.findViewById(R.id.feedback_edit_text);
+            AlertDialog dialog = new AlertDialog.Builder(getActivity(), getTheme())
+                    .setTitle(R.string.about_dialog_title_feedback)
+                    .setView(v)
+                    .setPositiveButton(R.string.about_dialog_post_feedback, new DialogInterface.OnClickListener() {
+                        @SuppressLint("StaticFieldLeak")
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String message = text.getText().toString();
+                            new BaseRespTask<String, Resp>(null) {
+                                @Override
+                                public Resp newInstance() {
+                                    return new Resp();
+                                }
+
+                                @Override
+                                public Resp getResult(String[] message) throws ANError {
+                                    return API.uploadFeedback(message[0]);
+                                }
+
+                                @Override
+                                protected void onPostExecute(Resp resp) {
+//                                    if(resp != null && resp.status && getActivity() != null){
+//                                        Snackbar.make(getActivity().getWindow().getDecorView(),
+//                                                R.string.feedback_snack_success, Snackbar.LENGTH_SHORT)
+//                                                .show();
+//                                    }
+                                }
+                            }.execute(message);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .create();
+            if (dialog.getWindow() != null) {
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            }
+            return dialog;
         }
     }
 }
