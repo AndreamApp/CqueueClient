@@ -26,6 +26,9 @@
 
         <item name="gradeCardBgColor">#f0f0f0</item>
         <item name="gradeItemTextColor">#333333</item>
+
+        <!-- menu icon color -->
+        <item name="android:textColorSecondary">#e0e0e0</item>
     </style>
 
     <style name="AppThemeBlue" parent="Theme.AppCompat.Light.NoActionBar">
@@ -53,14 +56,17 @@
 
         <item name="gradeCardBgColor">#f0f0f0</item>
         <item name="gradeItemTextColor">#333333</item>
+
+        <!-- menu icon color -->
+        <item name="android:textColorSecondary">#e0e0e0</item>
     </style>
 
-    <style name="AppThemeBlack" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="AppThemeBlack" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimaryDark">#292929</item>
         <item name="toolBarColor">#3e3e3e</item>
-        <item name="colorPrimary">#393939</item>
-        <item name="colorAccent">#565656</item>
+        <item name="colorPrimary">#6e6e6e</item>
+        <item name="colorAccent">#979797</item>
 
         <item name="titleTextColor">#f8f8f8</item>
         <item name="foreTextColor">#f8f8f8</item>
