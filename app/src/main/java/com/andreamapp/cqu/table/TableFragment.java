@@ -73,7 +73,6 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         mTableViewModel = ViewModelProviders.of(this).get(TableViewModel.class);
         mRefresh.setColorSchemeColors(getPrimiryColor(), getPrimiryColor(), getAccentColor());
         mRefresh.setEnabled(false);
-        refresh(false);
 
         // setup tool bar and menu
         setSupportActionBar(mToolBar);
@@ -99,6 +98,12 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        refresh(false);
+    }
+
     public void refresh(boolean fromNetwork) {
         if (mAdapter.getCount() == 0) {
             showState(R.string.state_loading);
@@ -113,12 +118,17 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
 
         mRefresh.setRefreshing(false);
         if (wrapper != null && wrapper.status) {
-            mAdapter.wrapper = wrapper;
-            mAdapter.notifyDataSetChanged();
             Calendar c = Calendar.getInstance();
             // Todo: Fetch it from network
             c.set(2018, Calendar.MARCH, 5, 0, 0, 0);
             setSemesterStartDate(c);
+
+            boolean isEmpty = mAdapter.getCount() == 0;
+            mAdapter.wrapper = wrapper;
+            mAdapter.notifyDataSetChanged();
+            if (isEmpty) {
+                switchToCurrWeek();
+            }
 
             // show empty
             if (mAdapter.getCount() == 0) {
@@ -138,6 +148,10 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
                 hideState();
             }
         }
+    }
+
+    private void switchToCurrWeek() {
+        mViewPager.setCurrentItem(mThisWeekNum);
     }
 
     @Override
@@ -171,12 +185,18 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         return semesterStartDate;
     }
 
+    /**
+     * 根据学期开始日期，计算当前周。当前周需要及时更新，避免用户被过时的当前周误导。
+     * 目前每次启动Activity都会计算一次
+     * TODO: 从服务器获取当前学期开始日期
+     *
+     * @param semesterStartDate 学期开始日期
+     */
     public void setSemesterStartDate(Calendar semesterStartDate) {
         this.semesterStartDate = semesterStartDate;
         long days = (Calendar.getInstance().getTimeInMillis() - semesterStartDate.getTimeInMillis()) / (24 * 60 * 60 * 1000);
         long weekNum = days / 7;
         mThisWeekNum = (int) weekNum;
-        mViewPager.setCurrentItem(mThisWeekNum);
     }
 
     @Override
@@ -212,17 +232,27 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         CourseDetailDialogFragment.newInstance(index).show(getSupportFragmentManager(), "CourseDetail");
     }
 
+    /**
+     * 重新导入课表对话框，回调函数
+     */
     @Override
     public void onReloadTable() {
         refresh(true);
     }
 
+    /**
+     * 登出对话框，回调函数
+     */
     @Override
     public void onUserLogout() {
         mRefresh.setRefreshing(true);
         new LogoutTask(this).execute();
     }
 
+    /**
+     * 登出任务，回调函数
+     * @param res result of logout, true in most case
+     */
     @Override
     public void onLogout(boolean res) {
         mRefresh.setRefreshing(false);
