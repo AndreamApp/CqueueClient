@@ -175,6 +175,15 @@ public class BaseModelActivity<T extends Resp> extends AppCompatActivity
         }
     }
 
+    /**
+     * 使用默认的动画启动Activity
+     *
+     * @param intent intent
+     */
+    public void superStartActivity(Intent intent) {
+        super.startActivity(intent);
+    }
+
     @Override
     public void finish() {
         super.finish();
@@ -183,5 +192,12 @@ public class BaseModelActivity<T extends Resp> extends AppCompatActivity
         } else {
             overridePendingTransition(R.anim.slide_left_half_in, R.anim.slide_right_out);
         }
+    }
+
+    /**
+     * 使用默认的动画结束Activity
+     */
+    public void superFinish() {
+        super.finish();
     }
 }

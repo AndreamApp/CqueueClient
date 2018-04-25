@@ -2,6 +2,7 @@ package com.andreamapp.cqu.utils;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.andreamapp.cqu.App;
 import com.andreamapp.cqu.bean.Exams;
@@ -112,29 +113,27 @@ public class API {
     private static OkHttpClient withCookie(Context context) {
         CookieJar cookieJar =  new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
 
-        OkHttpClient client = trustAll()
+        return trustAll()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .cookieJar(cookieJar)
             .build();
-        return client;
     }
 
     private static OkHttpClient withSaveOnlyCookie(Context context) {
         CookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context)){
             @Override
             public synchronized List<Cookie> loadForRequest(HttpUrl url) {
-                return new ArrayList<Cookie>();
+                return new ArrayList<>();
             }
         };
-        OkHttpClient client = trustAll()
+        return trustAll()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .cookieJar(cookieJar)
                 .build();
-        return client;
     }
 
     public static boolean cookieExpired(Context context) {
@@ -185,10 +184,10 @@ public class API {
                 .getResponseOnlyFromNetwork()
                 .build();
 
-        ANResponse<JSONObject> response = request.executeForJSONObject();
+        ANResponse response = request.executeForJSONObject();
 
         if (response.isSuccess()) {
-            JSONObject object = response.getResult();
+            JSONObject object = (JSONObject) response.getResult();
             try {
                 return object.getBoolean("status");
             } catch (JSONException e) {
@@ -208,10 +207,10 @@ public class API {
                 .setOkHttpClient(withSaveOnlyCookie(App.context()))
                 .getResponseOnlyFromNetwork()
                 .build();
-        ANResponse<User> response = request.executeForObject(User.class);
+        ANResponse response = request.executeForObject(User.class);
 
         if (response.isSuccess()) {
-            return response.getResult();
+            return (User) response.getResult();
         } else {
             throw response.getError();
         }
@@ -230,10 +229,10 @@ public class API {
         }
 
         ANRequest request = builder.build();
-        ANResponse<Table> response = request.executeForObject(Table.class);
+        ANResponse response = request.executeForObject(Table.class);
 
         if (response.isSuccess()) {
-            return response.getResult();
+            return (Table) response.getResult();
         } else {
             throw response.getError();
         }
@@ -250,10 +249,10 @@ public class API {
         }
 
         ANRequest request = builder.build();
-        ANResponse<Grade> response = request.executeForObject(Grade.class);
+        ANResponse response = request.executeForObject(Grade.class);
 
         if (response.isSuccess()) {
-            return response.getResult();
+            return (Grade) response.getResult();
         } else {
             throw response.getError();
         }
@@ -270,10 +269,10 @@ public class API {
         }
 
         ANRequest request = builder.build();
-        ANResponse<Exams> response = request.executeForObject(Exams.class);
+        ANResponse response = request.executeForObject(Exams.class);
 
         if (response.isSuccess()) {
-            return response.getResult();
+            return (Exams) response.getResult();
         } else {
             throw response.getError();
         }
@@ -285,10 +284,10 @@ public class API {
                 .setOkHttpClient(withCookie(App.context()));
 
         ANRequest request = builder.build();
-        ANResponse<Resp> response = request.executeForObject(Resp.class);
+        ANResponse response = request.executeForObject(Resp.class);
 
         if (response.isSuccess()) {
-            return response.getResult();
+            return (Resp) response.getResult();
         } else {
             throw response.getError();
         }
@@ -306,16 +305,18 @@ public class API {
             return null;
         }
 
+        Log.i("CRASH", json);
+
         ANRequest.PostRequestBuilder builder = AndroidNetworking.post(HOST + URL_CRASH)
                 .addStringBody(json)
                 .setPriority(Priority.LOW)
                 .setOkHttpClient(withCookie(App.context()));
 
         ANRequest request = builder.build();
-        ANResponse<Resp> response = request.executeForObject(Resp.class);
+        ANResponse response = request.executeForObject(Resp.class);
 
         if (response.isSuccess()) {
-            return response.getResult();
+            return (Resp) response.getResult();
         } else {
             throw response.getError();
         }
@@ -328,10 +329,10 @@ public class API {
                 .setOkHttpClient(withCookie(App.context()));
 
         ANRequest request = builder.build();
-        ANResponse<Resp> response = request.executeForObject(Resp.class);
+        ANResponse response = request.executeForObject(Resp.class);
 
         if (response.isSuccess()) {
-            return response.getResult();
+            return (Resp) response.getResult();
         } else {
             throw response.getError();
         }
@@ -343,10 +344,10 @@ public class API {
                 .setOkHttpClient(withCookie(App.context()));
 
         ANRequest request = builder.build();
-        ANResponse<Feedbacks> response = request.executeForObject(Feedbacks.class);
+        ANResponse response = request.executeForObject(Feedbacks.class);
 
         if (response.isSuccess()) {
-            return response.getResult();
+            return (Feedbacks) response.getResult();
         } else {
             throw response.getError();
         }
@@ -358,10 +359,10 @@ public class API {
                 .setOkHttpClient(withCookie(App.context()));
 
         ANRequest request = builder.build();
-        ANResponse<Update> response = request.executeForObject(Update.class);
+        ANResponse response = request.executeForObject(Update.class);
 
         if (response.isSuccess()) {
-            return response.getResult();
+            return (Update) response.getResult();
         } else {
             throw response.getError();
         }

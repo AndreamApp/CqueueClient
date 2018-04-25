@@ -34,6 +34,8 @@
         <activity
             android:label="@string/label_about"
             android:name=".about.AboutActivity" />
+
+        <activity android:name=".base.BaseModelActivity" />
     </application>
 
 </manifest>

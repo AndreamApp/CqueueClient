@@ -131,12 +131,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         } else {
             // show error
             if (mAdapter.getCount() == 0) {
-                showState(R.string.state_no_table, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        refresh(true);
-                    }
-                });
+                showState(R.string.state_no_table, v -> refresh(true));
             }
             // keep old data
             else {
@@ -162,7 +157,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
             Intent startMain = new Intent(Intent.ACTION_MAIN);
             startMain.addCategory(Intent.CATEGORY_HOME);
             startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(startMain);
+            superStartActivity(startMain);
         }
     }
 
