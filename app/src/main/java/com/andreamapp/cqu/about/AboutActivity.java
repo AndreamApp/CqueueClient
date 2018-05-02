@@ -26,7 +26,6 @@ import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.base.BaseModelActivity;
 import com.andreamapp.cqu.base.BaseRespTask;
 import com.andreamapp.cqu.bean.Resp;
-import com.andreamapp.cqu.bean.Update;
 import com.andreamapp.cqu.utils.API;
 import com.andreamapp.cqu.utils.Alipay;
 import com.androidnetworking.error.ANError;
@@ -74,36 +73,7 @@ public class AboutActivity extends BaseModelActivity {
                     @SuppressLint("StaticFieldLeak")
                     @Override
                     public void onClick(final View v) {
-                        new BaseRespTask<Void, Update>(null) {
-                            @Override
-                            public Update newInstance() {
-                                return new Update();
-                            }
-
-                            @Override
-                            public Update getResult(Void[] voids) throws ANError {
-                                return API.checkUpdate();
-                            }
-
-                            @Override
-                            protected void onPostExecute(final Update update) {
-                                if (update.status && update.data != null) {
-                                    if (update.data.version_code > getVersionCode()) {
-                                        Snackbar.make(v, update.data.description, Snackbar.LENGTH_INDEFINITE)
-                                                .setAction(R.string.about_action_update, new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
-                                                        openUrl(update.data.download_url);
-                                                    }
-                                                }).show();
-                                    } else {
-                                        Snackbar.make(v, R.string.about_no_update, Snackbar.LENGTH_SHORT)
-                                                .show();
-                                    }
-                                }
-
-                            }
-                        }.execute();
+                        new CheckUpdateTask(AboutActivity.this).execute();
                     }
                 }).add();
         newHeader().name(R.string.about_header_support).add();

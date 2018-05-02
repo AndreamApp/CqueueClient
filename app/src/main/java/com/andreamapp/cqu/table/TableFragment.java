@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.about.AboutActivity;
+import com.andreamapp.cqu.about.CheckUpdateTask;
 import com.andreamapp.cqu.base.BaseModelActivity;
 import com.andreamapp.cqu.exams.ExamsActivity;
 import com.andreamapp.cqu.grade.GradeActivity;
@@ -96,6 +97,10 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
 
             }
         });
+
+
+        // Check update as start
+        new CheckUpdateTask(TableFragment.this, false).execute();
     }
 
     @Override
