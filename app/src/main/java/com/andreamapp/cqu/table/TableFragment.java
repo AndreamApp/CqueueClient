@@ -1,8 +1,10 @@
 package com.andreamapp.cqu.table;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -82,7 +84,6 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
@@ -94,7 +95,6 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -232,9 +232,15 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         return true;
     }
 
+    static final long COURSE_CLICK_THRESH = 100;
+    long course_last_click;
     @Override
     public void onCourseClicked(CourseIndex index) {
-        CourseDetailDialogFragment.newInstance(index).show(getSupportFragmentManager(), "CourseDetail");
+        long now = SystemClock.uptimeMillis();
+        if (now - course_last_click > COURSE_CLICK_THRESH) {
+            course_last_click = now;
+            CourseDetailDialogFragment.newInstance(index).show(getSupportFragmentManager(), "CourseDetail");
+        }
     }
 
     /**
@@ -342,6 +348,8 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
 
         TextView courseName, teacherName, classroom, credit, hours;
 
+        static volatile boolean isShowing;
+
         public static CourseDetailDialogFragment newInstance(CourseIndex index) {
             CourseDetailDialogFragment fragment = new CourseDetailDialogFragment();
             fragment.courseIndex = index;
@@ -377,6 +385,20 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
                 credit.setText(getString(R.string.course_detail_item_credit, courseIndex.course.credit));
                 hours.setText(getString(R.string.course_detail_item_hours_all, courseIndex.course.hours_all));
             }
+        }
+
+        @Override
+        public void show(FragmentManager manager, String tag) {
+            if (!isShowing) {
+                isShowing = true;
+                super.show(manager, tag);
+            }
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            isShowing = false;
+            super.onCancel(dialog);
         }
     }
 
