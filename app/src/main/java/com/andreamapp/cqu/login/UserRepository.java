@@ -43,9 +43,13 @@ public class UserRepository {
         @Override
         public User getResult(String[] args) throws ANError {
             User user = API.login(args[0], args[1]);
-            // save user profile info
-            if(user != null){
+            // save user profile info when success
+            if(user != null && user.status){
                 Cache.saveUser(user);
+            }
+            else{
+                // clear user cookie when failed
+                API.clearCookies(App.context());
             }
             return user;
         }

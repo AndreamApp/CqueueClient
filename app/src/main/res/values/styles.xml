@@ -61,6 +61,36 @@
         <item name="android:textColorSecondary">#e0e0e0</item>
     </style>
 
+    <style name="AppThemeCyan" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">#3d7876</item>
+        <item name="toolBarColor">#68B4B2</item>
+        <item name="colorPrimary">#68B4B2</item>
+        <item name="colorAccent">#68B4B2</item>
+
+        <item name="titleTextColor">#f8f8f8</item>
+        <item name="foreTextColor">#333333</item>
+        <item name="hintTextColor">#666666</item>
+
+        <item name="tableHeaderTextColor">#808080</item>
+        <item name="courseTextColor">#f0f0f0</item>
+        <item name="tableItemBg">#68b4b2</item>
+        <item name="tableItemBgPressed">#3d7876</item>
+        <item name="courseDetailBgColor">#f0f0f0</item>
+        <item name="courseDetailNameTextColor">#3d7876</item>
+        <item name="courseDetailItemTextColor">#444444</item>
+
+        <item name="examsCardBgColor">#f0f0f0</item>
+        <item name="examsNameTextColor">#3d7876</item>
+        <item name="examsItemTextColor">#333333</item>
+
+        <item name="gradeCardBgColor">#f0f0f0</item>
+        <item name="gradeItemTextColor">#333333</item>
+
+        <!-- menu icon color -->
+        <item name="android:textColorSecondary">#e0e0e0</item>
+    </style>
+
     <style name="AppThemeBlack" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimaryDark">#292929</item>

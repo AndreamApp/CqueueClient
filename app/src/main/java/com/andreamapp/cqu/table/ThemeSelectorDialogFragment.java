@@ -42,6 +42,9 @@ public class ThemeSelectorDialogFragment extends AppCompatDialogFragment {
                                 theme = "Blue";
                                 break;
                             case 3:
+                                theme = "Cyan";
+                                break;
+                            case 4:
                                 theme = "Black";
                                 break;
                         }

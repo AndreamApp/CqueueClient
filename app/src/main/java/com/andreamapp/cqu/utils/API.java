@@ -154,10 +154,14 @@ public class API {
         return res;
     }
 
-    public static boolean logout(Context context) throws ANError {
-        // clear cookie
+    public static void clearCookies(Context context){
         SharedPrefsCookiePersistor persistor = new SharedPrefsCookiePersistor(context);
         persistor.clear();
+    }
+
+    public static boolean logout(Context context) throws ANError {
+        // clear cookie
+        clearCookies(context);
 
         // clear cache
         App.context().getSharedPreferences("cache", Context.MODE_PRIVATE)

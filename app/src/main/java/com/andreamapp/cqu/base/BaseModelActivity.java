@@ -87,6 +87,8 @@ public class BaseModelActivity<T extends Resp> extends AppCompatActivity
             res = R.style.AppThemeBlack;
         } else if ("Blue".equals(themeSetting)) {
             res = R.style.AppThemeBlue;
+        } else if ("Cyan".equals(themeSetting)) {
+            res = R.style.AppThemeCyan;
         } else if ("Pink".equals(themeSetting)) {
             res = R.style.AppThemePink;
         }
