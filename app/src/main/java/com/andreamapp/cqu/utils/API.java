@@ -129,9 +129,9 @@ public class API {
             }
         };
         return trustAll()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
                 .cookieJar(cookieJar)
                 .build();
     }
@@ -152,19 +152,6 @@ public class API {
             }
         }
         return res;
-    }
-
-    @Nullable
-    public static User currentUser(Context context) {
-        String json = App.context().getSharedPreferences("cache", Context.MODE_PRIVATE)
-                .getString("user_profile", "");
-        User user = null;
-        try {
-            user = new Gson().fromJson(json, User.class);
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        }
-        return user;
     }
 
     public static boolean logout(Context context) throws ANError {

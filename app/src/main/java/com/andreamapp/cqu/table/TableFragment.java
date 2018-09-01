@@ -30,6 +30,7 @@ import com.andreamapp.cqu.exams.ExamsActivity;
 import com.andreamapp.cqu.grade.GradeActivity;
 import com.andreamapp.cqu.login.LoginActivity;
 import com.andreamapp.cqu.utils.API;
+import com.andreamapp.cqu.utils.Cache;
 
 import java.util.Calendar;
 import java.util.List;
@@ -98,7 +99,6 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
             }
         });
 
-
         // Check update as start
         new CheckUpdateTask(TableFragment.this, false).execute();
     }
@@ -123,10 +123,8 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
 
         mRefresh.setRefreshing(false);
         if (wrapper != null && wrapper.status) {
-            Calendar c = Calendar.getInstance();
-            // Todo: Fetch it from network
-            c.set(2018, Calendar.MARCH, 5, 0, 0, 0);
-            setSemesterStartDate(c);
+            Calendar startDate = wrapper.getSemesterStartDate();
+            setSemesterStartDate(startDate);
 
             boolean isEmpty = mAdapter.getCount() == 0;
             mAdapter.wrapper = wrapper;
@@ -225,7 +223,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.action_logout:
-                ProfileDialogFragment.newInstance(API.currentUser(this))
+                ProfileDialogFragment.newInstance(Cache.currentUser())
                         .show(getSupportFragmentManager(), "Profile");
                 break;
         }

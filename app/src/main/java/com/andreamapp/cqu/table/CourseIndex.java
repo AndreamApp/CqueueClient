@@ -83,6 +83,15 @@ public class CourseIndex implements Comparable<CourseIndex> {
         List<Set<CourseIndex>> res = new ArrayList<>(MAX_WEEK_NUM + 1);
         for (int i = 0; i < MAX_WEEK_NUM + 1; i++) {
             res.add(new TreeSet<CourseIndex>());
+            for(int w = 0; w < 7; w++){
+                CourseIndex separator = new CourseIndex();
+                separator.weekday = w;
+                separator.course = null;
+                separator.classroom = null;
+                separator.sectionStart = 11;
+                separator.sectionEnd = -1;
+                res.get(i).add(separator);
+            }
         }
 
         List<Table.Course> courses = table.data;

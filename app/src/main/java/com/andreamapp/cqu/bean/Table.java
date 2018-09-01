@@ -12,6 +12,7 @@ public class Table extends Resp {
     //    public boolean status;
 //    public String msg;
 //    public String err;
+    public String semester_start_date;
     public List<Course> data;
 
     /*

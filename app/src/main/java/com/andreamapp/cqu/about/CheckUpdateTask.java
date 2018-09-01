@@ -15,6 +15,7 @@ import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.base.BaseRespTask;
 import com.andreamapp.cqu.bean.Update;
 import com.andreamapp.cqu.utils.API;
+import com.andreamapp.cqu.utils.Cache;
 import com.androidnetworking.error.ANError;
 
 import java.lang.ref.WeakReference;
@@ -70,7 +71,6 @@ public class CheckUpdateTask extends BaseRespTask<Void, Update> {
                         .show();
             }
         }
-
     }
 
     public int getVersionCode() {
