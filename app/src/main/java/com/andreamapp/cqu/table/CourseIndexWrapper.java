@@ -24,7 +24,7 @@ public class CourseIndexWrapper extends Resp {
     public Calendar getSemesterStartDate(){
         Calendar calendar = null;
         try {
-            Date date = new SimpleDateFormat("yyyy-mm-dd", Locale.CHINA).parse(source.semester_start_date);
+            Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).parse(source.semester_start_date);
             calendar = Calendar.getInstance();
             calendar.setTime(date);
         } catch (ParseException e) {

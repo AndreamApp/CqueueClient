@@ -68,7 +68,7 @@ public class AboutActivity extends BaseModelActivity {
         container = findViewById(R.id.about_container);
 
         newItem().name(R.string.about_item_update)
-                .description("v0.0.1")
+                .description("v0.0.2")
                 .click(new View.OnClickListener() {
                     @SuppressLint("StaticFieldLeak")
                     @Override
