@@ -1,7 +1,6 @@
 package com.andreamapp.cqu.utils;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.andreamapp.cqu.App;
@@ -21,7 +20,6 @@ import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
 import org.acra.data.CrashReportData;
 import org.json.JSONException;
@@ -210,8 +208,6 @@ public class API {
     public static Table getTable(boolean fromNetwork) throws ANError {
         ANRequest.GetRequestBuilder builder = AndroidNetworking.get(HOST + URL_GET_TABLE)
                 .setPriority(Priority.LOW)
-                .setMaxAgeCacheControl(1, TimeUnit.SECONDS)
-                .setMaxStaleCacheControl(2, TimeUnit.MINUTES)
                 .setOkHttpClient(withCookie(App.context()));
         if (!fromNetwork) {
             builder.getResponseOnlyIfCached();
@@ -232,8 +228,6 @@ public class API {
     public static Grade getGrade(boolean fromNetwork) throws ANError {
         ANRequest.GetRequestBuilder builder = AndroidNetworking.get(HOST + URL_GET_GRADE)
                 .setPriority(Priority.LOW)
-                .setMaxAgeCacheControl(1, TimeUnit.SECONDS)
-                .setMaxStaleCacheControl(2, TimeUnit.MINUTES)
                 .setOkHttpClient(withCookie(App.context()));
         if (!fromNetwork) {
             builder.getResponseOnlyIfCached();
@@ -252,8 +246,6 @@ public class API {
     public static Exams getExams(boolean fromNetwork) throws ANError {
         ANRequest.GetRequestBuilder builder = AndroidNetworking.get(HOST + URL_GET_EXAMS)
                 .setPriority(Priority.LOW)
-                .setMaxAgeCacheControl(1, TimeUnit.SECONDS)
-                .setMaxStaleCacheControl(2, TimeUnit.MINUTES)
                 .setOkHttpClient(withCookie(App.context()));
         if (!fromNetwork) {
             builder.getResponseOnlyIfCached();

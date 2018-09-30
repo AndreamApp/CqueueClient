@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -22,11 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.andreamapp.cqu.R;
-import com.andreamapp.cqu.base.BaseRespTask;
-import com.andreamapp.cqu.bean.Grade;
-import com.andreamapp.cqu.bean.Resp;
-import com.andreamapp.cqu.utils.API;
-import com.androidnetworking.error.ANError;
 
 import java.util.Date;
 import java.util.List;
@@ -115,6 +109,7 @@ public class TableView extends RelativeLayout {
                     if (sections > 0) {
                         final CourseView empty = new CourseView(getContext());
                         empty.emptySection(sections);
+                        /* don't enable this function now
                         empty.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -122,6 +117,7 @@ public class TableView extends RelativeLayout {
                                         .show(((AppCompatActivity)getContext()).getSupportFragmentManager(), "todo");
                             }
                         });
+                        */
                         MarginLayoutParams lp = new MarginLayoutParams(
                                 ViewGroup.LayoutParams.MATCH_PARENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT);
