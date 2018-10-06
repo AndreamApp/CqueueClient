@@ -53,7 +53,7 @@ import okhttp3.Response;
 
 public class API {
 
-    private static final String HOST = "https://cqu.andreamapp.com";
+    private static final String HOST = "https://cqu.andream.app";
     private static final String URL_LOGIN = "/api/v1/login";
     private static final String URL_LOGOUT = "/api/v1/logout";
     private static final String URL_GET_TABLE = "/api/v1/getTable";
