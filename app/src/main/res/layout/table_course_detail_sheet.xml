@@ -6,18 +6,46 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/course_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="?attr/courseDetailNameTextColor"
-        android:textSize="24sp" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/course_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/courseDetailNameTextColor"
+            android:textSize="24sp"
+            android:layout_weight="1.0" />
+
+        <TextView
+            android:id="@+id/course_explore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#2297F0"
+            android:textSize="16sp"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:padding="3dp"
+            android:text="  EXPLORE  " />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/course_teacher_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
+        android:textSize="16sp"
+        android:textColor="?attr/courseDetailItemTextColor" />
+
+    <TextView
+        android:id="@+id/course_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:textSize="16sp"
         android:textColor="?attr/courseDetailItemTextColor" />
 

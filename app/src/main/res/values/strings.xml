@@ -28,6 +28,7 @@
     <string name="login_error_num_only">学号只能包含数字</string>
 
     <string name="course_detail_item_teacher">%s（任课教师）</string>
+    <string name="course_detail_item_time">第%d周 %s %d-%d节（上课时间）</string>
     <string name="course_detail_item_classroom">%s（上课地点）</string>
     <string name="course_detail_item_credit">%s（学分）</string>
     <string name="course_detail_item_hours_all">%s（总学时）</string>
@@ -38,6 +39,7 @@
     <string name="table_reload_confirm">确定要重新导入课表吗？</string>
     <string name="table_reload_confirm_title">提示</string>
     <string name="logout">登出</string>
+    <string name="menu_search_courses">课程检索</string>
     <string name="menu_exams">考试</string>
     <string name="menu_grade">成绩</string>
     <string name="menu_reload_table">重新导入课表</string>
@@ -67,5 +69,6 @@
     <string name="about_dialog_title_feedback">建议</string>
     <string name="about_dialog_post_feedback">提交</string>
     <string name="feedback_snack_success">反馈成功</string>
+    <string name="search_hint">课程关键字…</string>
 
 </resources>

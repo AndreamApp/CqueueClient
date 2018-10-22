@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,7 +30,6 @@ import com.andreamapp.cqu.base.BaseModelActivity;
 import com.andreamapp.cqu.exams.ExamsActivity;
 import com.andreamapp.cqu.grade.GradeActivity;
 import com.andreamapp.cqu.login.LoginActivity;
-import com.andreamapp.cqu.utils.API;
 import com.andreamapp.cqu.utils.Cache;
 
 import java.util.Calendar;
@@ -181,6 +181,29 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        MenuItem myActionMenuItem = menu.findItem(R.id.action_search_courses);
+        SearchView searchView = (SearchView) myActionMenuItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_hint));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // TODO
+                Snackbar.make(searchView, "SearchOnQueryTextSubmit: " + query, Snackbar.LENGTH_SHORT).show();
+                if (!searchView.isIconified()) {
+                    searchView.setIconified(true);
+                }
+                myActionMenuItem.collapseActionView();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -237,7 +260,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         long now = SystemClock.uptimeMillis();
         if (now - course_last_click > COURSE_CLICK_THRESH) {
             course_last_click = now;
-            CourseDetailDialogFragment.newInstance(index).show(getSupportFragmentManager(), "CourseDetail");
+            CourseDetailDialogFragment.newInstance(index, mThisWeekNum).show(getSupportFragmentManager(), "CourseDetail");
         }
     }
 
@@ -342,15 +365,18 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
      */
     public static class CourseDetailDialogFragment extends BottomSheetDialogFragment {
 
+        private static final String[] WEEKDAY = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
         CourseIndex courseIndex;
+        int weekNum;
 
-        TextView courseName, teacherName, classroom, credit, hours;
+        TextView courseName, teacherName, courseTime, classroom, credit, hours;
 
         static volatile boolean isShowing;
 
-        public static CourseDetailDialogFragment newInstance(CourseIndex index) {
+        public static CourseDetailDialogFragment newInstance(CourseIndex index, int weekNum) {
             CourseDetailDialogFragment fragment = new CourseDetailDialogFragment();
             fragment.courseIndex = index;
+            fragment.weekNum = weekNum;
 
             return fragment;
         }
@@ -361,6 +387,7 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
             View v = inflater.inflate(R.layout.table_course_detail_sheet, container, false);
             courseName = v.findViewById(R.id.course_name);
             teacherName = v.findViewById(R.id.course_teacher_name);
+            courseTime = v.findViewById(R.id.course_time);
             classroom = v.findViewById(R.id.course_classroom);
             credit = v.findViewById(R.id.course_credit);
             hours = v.findViewById(R.id.course_hours);
@@ -379,6 +406,8 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
             if (courseIndex != null && courseIndex.course != null) {
                 courseName.setText(courseIndex.course.course_name);
                 teacherName.setText(getString(R.string.course_detail_item_teacher, courseIndex.course.teacher));
+                courseTime.setText(getString(R.string.course_detail_item_time, weekNum, WEEKDAY[courseIndex.weekday % 7],
+                        courseIndex.sectionStart, courseIndex.sectionEnd));
                 classroom.setText(getString(R.string.course_detail_item_classroom, courseIndex.classroom));
                 credit.setText(getString(R.string.course_detail_item_credit, courseIndex.course.credit));
                 hours.setText(getString(R.string.course_detail_item_hours_all, courseIndex.course.hours_all));
