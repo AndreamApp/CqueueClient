@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.andreamapp.cqu.App;
+import com.andreamapp.cqu.bean.Courses;
 import com.andreamapp.cqu.bean.Exams;
 import com.andreamapp.cqu.bean.Feedbacks;
 import com.andreamapp.cqu.bean.Grade;
@@ -64,6 +65,7 @@ public class API {
     private static final String URL_UPLOAD_FEEDBACK = "/api/v1/uploadFeedback";
     private static final String URL_GET_FEEDBACKS = "/api/v1/getFeedbacks";
     private static final String URL_CHECK_UPDATE = "/api/v1/checkUpdate";
+    private static final String URL_SEARCH_COURSE = "/api/v1/searchCourse";
 
 
     private static OkHttpClient.Builder trustAll() {
@@ -291,7 +293,7 @@ public class API {
         Log.i("CRASH", json);
 
         ANRequest.PostRequestBuilder builder = AndroidNetworking.post(HOST + URL_CRASH)
-                .addStringBody(json)
+                .addBodyParameter("crash_data", json)
                 .setPriority(Priority.LOW)
                 .setOkHttpClient(withCookie(App.context()));
 
@@ -346,6 +348,22 @@ public class API {
 
         if (response.isSuccess()) {
             return (Update) response.getResult();
+        } else {
+            throw response.getError();
+        }
+    }
+
+    public static Courses searchCourse(String key) throws ANError {
+        ANRequest.GetRequestBuilder builder = AndroidNetworking.get(HOST + URL_SEARCH_COURSE)
+                .addQueryParameter("key", key)
+                .setPriority(Priority.LOW)
+                .setOkHttpClient(withCookie(App.context()));
+
+        ANRequest request = builder.build();
+        ANResponse response = request.executeForObject(Courses.class);
+
+        if (response.isSuccess()) {
+            return (Courses) response.getResult();
         } else {
             throw response.getError();
         }

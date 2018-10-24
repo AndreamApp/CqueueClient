@@ -29,7 +29,7 @@ public class CourseIndexTest {
         Table table = API.getTable(true);
         for (int i = 0; i < 100; i++) {
             long start = System.currentTimeMillis();
-            CourseIndexWrapper res = CourseIndex.generate(table);
+            CourseIndexWrapper res = new CourseIndexWrapper(table);
             long end = System.currentTimeMillis();
             long use = end - start;
             System.out.print(use);

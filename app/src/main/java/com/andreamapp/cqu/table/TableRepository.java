@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
 import com.andreamapp.cqu.base.BaseRespTask;
+import com.andreamapp.cqu.bean.Courses;
 import com.andreamapp.cqu.bean.Table;
 import com.andreamapp.cqu.utils.API;
 import com.androidnetworking.error.ANError;
@@ -36,6 +37,17 @@ public class TableRepository {
         MutableLiveData<CourseIndexWrapper> table = new MutableLiveData<>();
         new CourseIndexTask(table).execute(fromNetwork);
         return table;
+    }
+
+    /**
+     * 从网络搜索课程信息。要求已经通过API.login()登录教务网并且保存了有效的cookie
+     *
+     * @return LiveData<Table>
+     */
+    public static LiveData<Courses> searchCourse(String key) {
+        MutableLiveData<Courses> courses = new MutableLiveData<>();
+        new SearchCourseTask(courses).execute(key);
+        return courses;
     }
 
     /**
@@ -74,7 +86,7 @@ public class TableRepository {
         @Override
         public CourseIndexWrapper getResult(Boolean[] network) throws ANError {
             Table table = API.getTable(network[0]);
-            return CourseIndex.generate(table);
+            return new CourseIndexWrapper(table);
         }
 
         @Override
@@ -86,6 +98,23 @@ public class TableRepository {
         public CourseIndexWrapper redo(Boolean[] network) {
             network[0] = true;
             return super.redo(network);
+        }
+    }
+
+
+    public static class SearchCourseTask extends BaseRespTask<String, Courses> {
+        SearchCourseTask(MutableLiveData<Courses> res) {
+            super(res);
+        }
+
+        @Override
+        public Courses newInstance() {
+            return new Courses();
+        }
+
+        @Override
+        public Courses getResult(String[] key) throws ANError {
+            return API.searchCourse(key[0]);
         }
     }
 }

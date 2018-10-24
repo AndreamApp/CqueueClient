@@ -1,5 +1,8 @@
 package com.andreamapp.cqu.table;
 
+import android.annotation.SuppressLint;
+import android.app.ListFragment;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,8 +15,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -27,6 +33,7 @@ import com.andreamapp.cqu.R;
 import com.andreamapp.cqu.about.AboutActivity;
 import com.andreamapp.cqu.about.CheckUpdateTask;
 import com.andreamapp.cqu.base.BaseModelActivity;
+import com.andreamapp.cqu.bean.Courses;
 import com.andreamapp.cqu.exams.ExamsActivity;
 import com.andreamapp.cqu.grade.GradeActivity;
 import com.andreamapp.cqu.login.LoginActivity;
@@ -69,6 +76,9 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         mRefresh = findViewById(R.id.refresh);
         mViewPager = findViewById(R.id.table_view_pager);
 
+        // initially show table page
+        setVisiblePage(0);
+
         // setup adapter
         mAdapter = new WeekPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
@@ -109,6 +119,17 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         refresh(false);
     }
 
+    public void setVisiblePage(int page) {
+        if(0 == page) {
+            mViewPager.setVisibility(View.VISIBLE);
+            findViewById(R.id.fragment).setVisibility(View.GONE);
+        }
+        else if(1 == page) {
+            mViewPager.setVisibility(View.GONE);
+            findViewById(R.id.fragment).setVisibility(View.VISIBLE);
+        }
+    }
+
     public void refresh(boolean fromNetwork) {
         if (mAdapter.getCount() == 0) {
             showState(R.string.state_loading);
@@ -124,7 +145,9 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         mRefresh.setRefreshing(false);
         if (wrapper != null && wrapper.status) {
             Calendar startDate = wrapper.getSemesterStartDate();
-            setSemesterStartDate(startDate);
+            if(startDate != null) {
+                setSemesterStartDate(startDate);
+            }
 
             boolean isEmpty = mAdapter.getCount() == 0;
             mAdapter.wrapper = wrapper;
@@ -183,17 +206,27 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
         MenuItem myActionMenuItem = menu.findItem(R.id.action_search_courses);
+
         SearchView searchView = (SearchView) myActionMenuItem.getActionView();
         searchView.setQueryHint(getString(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // TODO
-                Snackbar.make(searchView, "SearchOnQueryTextSubmit: " + query, Snackbar.LENGTH_SHORT).show();
-                if (!searchView.isIconified()) {
-                    searchView.setIconified(true);
-                }
-                myActionMenuItem.collapseActionView();
+//                Snackbar.make(searchView, "SearchOnQueryTextSubmit: " + query, Snackbar.LENGTH_SHORT).show();
+                mRefresh.setRefreshing(true);
+                TableRepository.searchCourse(query).observe(TableFragment.this, courses -> {
+                    mRefresh.setRefreshing(false);
+                    setVisiblePage(1);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment, CourseListFragment.newInstance(courses))
+                            .commit();
+                });
+//                if (!searchView.isIconified()) {
+//                    searchView.setIconified(true);
+//                }
+//                myActionMenuItem.collapseActionView();
                 return false;
             }
 
@@ -426,6 +459,102 @@ public class TableFragment extends BaseModelActivity<CourseIndexWrapper>
         public void onCancel(DialogInterface dialog) {
             isShowing = false;
             super.onCancel(dialog);
+        }
+    }
+
+    public static class CourseListFragment extends Fragment {
+        Courses courses;
+
+        RecyclerView courseListRecyclerView;    // Show exams
+        CourseListAdapter courseListAdapter;              // Exams adapter
+        LinearLayoutManager courseListLayoutManager; // LayoutManager
+
+        public static CourseListFragment newInstance(Courses courses) {
+            CourseListFragment fragment = new CourseListFragment();
+            fragment.courses = courses;
+            return fragment;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            courseListRecyclerView = new RecyclerView(inflater.getContext());
+            courseListAdapter = new CourseListAdapter();
+            courseListAdapter.setCourses(courses);
+            courseListLayoutManager = new LinearLayoutManager(inflater.getContext());
+
+            courseListRecyclerView.setAdapter(courseListAdapter);
+            courseListRecyclerView.setLayoutManager(courseListLayoutManager);
+            return courseListRecyclerView;
+        }
+
+        static class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.ViewHolder>{
+            // Adapter data source
+            Courses courses;
+
+            public Courses getCourses() {
+                return courses;
+            }
+
+            public void setCourses(Courses courses) {
+                this.courses = courses;
+            }
+
+            @NonNull
+            @Override
+            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_course_item, parent, false);
+                return new ViewHolder(v);
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+                holder.bind(courses.data.get(position));
+            }
+
+            @Override
+            public int getItemCount() {
+                if(courses == null || courses.data == null) return 0;
+                return courses.data.size();
+            }
+
+            static class ViewHolder extends RecyclerView.ViewHolder {
+                TextView nameAndIsExp, teacherAndAcademy, schedule, studentDetail;
+                View btnAdd;
+
+                public ViewHolder(View v) {
+                    super(v);
+                    nameAndIsExp = v.findViewById(R.id.search_course_item_name);
+                    teacherAndAcademy = v.findViewById(R.id.search_course_item_teacher);
+                    schedule = v.findViewById(R.id.search_course_item_schedule);
+                    studentDetail = v.findViewById(R.id.search_course_item_detail);
+                    btnAdd = v.findViewById(R.id.search_course_btn_add);
+                }
+
+                @SuppressLint("SetTextI18n")
+                void bind(Courses.Course course) {
+                    String name = course.course_name;
+                    if(course.is_exp) {
+                        name += "(实验课)";
+                    }
+                    nameAndIsExp.setText(name);
+                    teacherAndAcademy.setText(course.teacher + " " + course.academy);
+                    StringBuilder scheduleSb = new StringBuilder();
+                    for(Courses.Course.Schedule sc : course.schedule) {
+                        scheduleSb
+                                .append(sc.weeks).append("周 ")
+                                .append("周").append(sc.classtime).append(" ")
+                                .append(sc.classroom).append("\n");
+                    }
+                    // remove the last '\n' char
+                    schedule.setText(scheduleSb.deleteCharAt(scheduleSb.length()-1).toString());
+                    studentDetail.setText(course.class_detail + " " + course.student_cnt + "人");
+
+                    btnAdd.setOnClickListener(v -> {
+
+                    });
+                }
+            }
         }
     }
 

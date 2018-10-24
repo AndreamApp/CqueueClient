@@ -1,0 +1,12 @@
+ext {
+    versions = [
+            // For project configuration
+            java                  : JavaVersion.VERSION_1_8,
+            compileSdk            : 28,
+            targetSdk             : 28,
+            minSdk                : 21,
+            buildTools            : '28.0.2',
+    ]
+    libraries = [
+    ]
+}
